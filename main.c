@@ -28,14 +28,19 @@ int main(int argc, char *argv[]){
 //Heres just a little start of an idea, what do yall think? -Emily
 
 //declare a 4kB of mem storage (array?)
+
+// like: int32_t memory[1024]; [M]
+
+
 //declare struct of registers 1-31
 
+// could do: int32_t registers[32]; (and ignore R0) [M]
 
 struct inst
 {
     char type;
-    int Opcode;
-    int rs;
+    int Opcode;	-> using an enum (opcode_t) could be useful here [M]
+    int rs;	-> also could be good to use int32_t so the int size isn't archtecture-dependent [M]
     int rt;
     int rd;
     int imm;
@@ -64,7 +69,11 @@ struct inst
         //save WB info for instruction in WB
     }
 
-
+	// We might want to use the halt instruction as a signal to add NOPs to the end of the pipeline such that
+	// the pipeline is flushed at the end of the program. Otherwise, depending on when we read the
+	// HALT instruction, we might cut off some instructions still in the pipe. I think another option would be
+	// to have the halt flag set during the WB stage of the halt instruction, so that the other instructions are
+	// already completed by the time the flag's set [M]
 
 
 

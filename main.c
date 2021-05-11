@@ -67,6 +67,7 @@ struct inst
         //execute instruction in EX
 
         //save WB info for instruction in WB
+			//if halt in wb set halt flag
     }
 
 	// We might want to use the halt instruction as a signal to add NOPs to the end of the pipeline such that
@@ -74,6 +75,9 @@ struct inst
 	// HALT instruction, we might cut off some instructions still in the pipe. I think another option would be
 	// to have the halt flag set during the WB stage of the halt instruction, so that the other instructions are
 	// already completed by the time the flag's set [M]
+
+	-That makes sense to me, I was picturing a kind of 'clean up' section outside of the loop, but that'd be easier
+	to put it in the WB, I changed the sketch to reflect that [E]
 
 
 

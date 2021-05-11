@@ -16,6 +16,10 @@
 #define ON		1
 
 // function prototypes
+int getDebug(int index, char* commands[]);
+char* getInputFile(int index, char* commands[]);
+char* getOutputFile(int index, char* commands[]);
+int getMode(int index, char* commands[]);
 FILE* openInputFile(const char* inputFile);
 FILE* openOutputFile(const char* outputFile);
 void closeFile(FILE* inputFile);

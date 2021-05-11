@@ -102,10 +102,44 @@ int main(int argc, char *argv[]){
 	/*
 
 
+//Heres just a little start of an idea, what do yall think? -Emily
+
+//declare a 4kB of mem storage (array?)
+//declare struct of registers 1-31
 
 
+struct inst
+{
+    char type;
+    int Opcode;
+    int rs;
+    int rt;
+    int rd;
+    int imm;
+    bool halt;
+};
 
-		Simulator Code
+//declare global clock counter, array[5], and circular buffer (5 entries)
+//declare struct for currant instructions
+
+    //input data from memory image into array?
+
+    //enter loop that continues until halt
+
+    while (halt != 1)
+    {
+        //increment counter
+        //parse first instruction into binary
+        //update array[5] with instruction
+            //most first to IF, IF to ID, ID to EX, EX to MEM, MEM to WB
+        //update circular buffer with instruction
+
+        //check for RAW hazard, handel 
+        
+        //execute instruction in EX
+
+        //save WB info for instruction in WB
+    }
 
 
 

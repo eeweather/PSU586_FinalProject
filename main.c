@@ -11,90 +11,13 @@
 
 int main(int argc, char *argv[]){
 
-	int debug = OFF;  	// keep track of simulator mode and whether debug is active
-	int mode = FUNCTIONAL;	// default to functional simulation mode
 	int count = 0;		// argv index
 
-	char *input = "input.txt";   // default input file name
-	char *output = "output.txt"; // default output file name
+	int debug = getDebug(argc, argv);
+	char* input = getInputFile(argc, argv);
+	char* output = getOutputFile(argc, argv);
+	int mode = getMode(argc, argv);
 
-	if (argc > 1){
-
-		// check for debug argument
-		for (count = 1; count < argc; count++){
-
-			if (strcmp(argv[count], "-d") == 0){
-				debug = ON;
-			}
-		}
-
-		// check for input file argument
-		for (count = 1; count < argc; count++){
-
-			if (strcmp(argv[count], "-i") == 0){
-
-				//check if the second argument is empty
-				if(argv[count+1] == NULL){
-					printf("Error: Argument cannot be empty\n"); 
-					exit(1);
-				}
-
-				input = argv[count + 1];
-			}
-		}
-
-		// check for output file argument
-		for (count = 1; count < argc; count++){
-
-			if (strcmp(argv[count], "-o") == 0){
-
-				//check if the second argument is empty
-				if(argv[count+1] == NULL){
-					printf("Error: Argument cannot be empty\n");
-					exit(1);
-				}
-
-				output = argv[count + 1];
-			} 
-		}	
-
-		// check for mode argument
-		for (count = 1; count < argc; count++){
-
-			if (strcmp(argv[count], "-m") == 0){
-
-				//check if the second argument is empty
-				if(argv[count+1] == NULL){
-					printf("Error: Argument cannot be empty\n");
-					exit(1);
-				}
-
-				else if(strcmp(argv[count+1], "0") == 0){
-					mode = FUNCTIONAL;
-					printf("\nMode: Functional simulation only\n");
-				}
-
-				else if(strcmp(argv[count+1], "1") == 0){
-					mode = TIMING;
-					printf("\nMode: Simulation with timing\n");
-				}
-
-				else if(strcmp(argv[count+1], "2") == 0){
-					mode = FORWARDING;
-					printf("\nMode: Simulation with timing and data forwarding\n");
-				}
-
-				else{
-					printf("Error: Invalid mode argument\n");
-					exit(1);
-				}
-
-			} // end if
-	
-		} // end for
-
-	} // end if
-	
 	FILE* addressFile = openInputFile(input);	// open memory file to read from
 	FILE* outputFile = openOutputFile(output);	// open file to output to
 
@@ -152,6 +75,99 @@ struct inst
 	closeFile(outputFile);	// close the output file
  
 	return 0;
+
+}
+
+// reads command line and returns debug flag if set
+int getDebug(int index, char* commands[]){
+
+		for (int i = 1; i < index; i++){
+
+			if (strcmp(commands[i], "-d") == 0){
+				printf("\nDebug mode on\n\n");
+				return ON;
+			}
+		}
+
+		return OFF;
+
+}
+
+// reads command line and returns input filename if set
+char* getInputFile(int index, char* commands[]){
+
+	for (int i = 1; i < index; i++){
+
+		if (strcmp(commands[i], "-i") == 0){
+
+			//check if the second argument is empty
+			if(commands[i+1] == NULL){
+				printf("\nError: Argument cannot be empty--terminating program\n\n"); 
+				exit(1);
+			}
+
+			return commands[i+1];
+		}
+	}
+
+	return "input.txt";
+}
+
+// reads command line and returns output filename if set
+char* getOutputFile(int index, char* commands[]){
+
+	for (int i = 1; i < index; i++){
+
+		if (strcmp(commands[i], "-o") == 0){
+
+			//check if the second argument is empty
+			if(commands[i+1] == NULL){
+				printf("\nError: Argument cannot be empty--terminating program\n\n"); 
+				exit(1);
+			}
+
+			return commands[i+1];
+		}
+	}
+
+	return "output.txt";
+}
+
+int getMode(int index, char* commands[]){
+
+	for (int i = 1; i < index; i++){
+
+		if (strcmp(commands[i], "-m") == 0){
+
+			//check if the second argument is empty
+			if(commands[i+1] == NULL){
+				printf("\nError: Argument cannot be empty--terminating program\n\n");
+				exit(1);
+			}
+
+			else if(strcmp(commands[i+1], "0") == 0){
+				printf("\nMode: Functional simulation only\n\n");
+				return FUNCTIONAL;
+			}
+
+			else if(strcmp(commands[i+1], "1") == 0){
+				printf("\nMode: Simulation with timing\n\n");
+				return TIMING;
+			}
+
+			else if(strcmp(commands[i+1], "2") == 0){
+				printf("\nMode: Simulation with timing and data forwarding\n\n");
+				return FORWARDING;
+			}
+
+			else{
+				printf("\nError: Invalid mode argument--terminating program\n\n");
+				exit(1);
+			}
+		} 
+	} 
+
+	return FUNCTIONAL;
 
 }
 

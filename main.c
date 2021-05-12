@@ -63,8 +63,15 @@ struct inst
         //update circular buffer with instruction
 
         //check for RAW hazard, handel 
-        
+
+	// Non-forwarding: stall 1 tick if needed register is in MEM stage, 2 if in EX
+	// Forwarding: if desired register is from non-load instruction, forward from its current stage
+	//	if desired register is from load instruction: stall 1 tick then forward if load is previous
+	//	instruction, or just forward if load is 2 instructions previous
+	// -> I think this makes sense, but could be missing some scenarios [M]
+
         //execute instruction in EX
+	// also if jump/branch to non-subsequent instruction, flush the pipeline (IF and ID stages) [M]
 
         //save WB info for instruction in WB
 			//if halt in wb set halt flag

@@ -49,7 +49,7 @@ struct inst
 
 // [D] I was also thinking of a struct for the MIPS architecture
 // we could use this to track counts for display, pc and flags etc
-struct mips_core
+struct mips_status
 {
     uint32_t pc;
     uint32_t pc_branch;

@@ -47,6 +47,25 @@ struct inst
     bool halt;
 };
 
+// [D] I was also thinking of a struct for the MIPS architecture
+// we could use this to track counts for display, pc and flags etc
+struct mips_core
+{
+    uint32_t pc;
+    uint32_t pc_branch;
+    uint32_t alu_temp;
+    uint32_t temp_pc;
+    uint16_t count_total;
+    uint16_t count_arith;
+    uint16_t count_logic;
+    uint16_t count_memory_access;
+    uint16_t count_control_flow;
+    bool     zero_flag;
+    bool     jump_flag;
+};
+
+
+
 //declare global clock counter, array[5], and circular buffer (5 entries)
 //declare struct for currant instructions
 

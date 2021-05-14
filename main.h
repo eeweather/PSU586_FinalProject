@@ -18,23 +18,28 @@
 
 // typedefs and enums
 typedef enum {
+    // Arithmetic Instructions
 	ADD	= 0x0,
 	ADDI	= 0x1,
 	SUB	= 0x2,
 	SUBI	= 0x3,
 	MUL	= 0x4,
 	MULI	= 0x5,
+    // Logical Instructions
 	OR	= 0x6,
 	ORI	= 0x7,
 	AND	= 0x8,
 	ANDI	= 0x9,
 	XOR	= 0xA,
 	XORI	= 0xB,
+    // Load/store
 	LDW	= 0xC,
 	STW	= 0xD,
+    // Branch
 	BZ	= 0xE,
 	BEQ	= 0xF,
 	JR	= 0x10,
+    // Halt Op
 	HALT	= 0x11 
 } opcode_t;
 

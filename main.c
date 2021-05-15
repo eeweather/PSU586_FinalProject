@@ -8,12 +8,11 @@
 ///////////////////////////////////////////////////////////
 
 #include "main.h"
+#include "mem_wb.h"
 
 int main(int argc, char *argv[]){
 
-	int count = 0;		// argv index
-
-	int debug = getDebug(argc, argv);
+	bool debug = getDebug(argc, argv);
 	char* input = getInputFile(argc, argv);
 	char* output = getOutputFile(argc, argv);
 	int mode = getMode(argc, argv);
@@ -21,40 +20,30 @@ int main(int argc, char *argv[]){
 	FILE* addressFile = openInputFile(input);	// open memory file to read from
 	FILE* outputFile = openOutputFile(output);	// open file to output to
 
-	////////////////////////////////////////////////////
-	/*
+////////////////////////// 
 
-
-//Heres just a little start of an idea, what do yall think? -Emily
 
 //declare a 4kB of mem storage (array?)
+int32_t memory[1024]; 
 
-// like: int32_t memory[1024]; [M]
+//declare registers
+int32_t registers[32];
 
-
-//declare struct of registers 1-31
-
-// could do: int32_t registers[32]; (and ignore R0) [M]
-
-struct inst
-{
-    char type;
-    int Opcode;	-> using an enum (opcode_t) could be useful here [M]
-    int rs;	-> also could be good to use int32_t so the int size isn't archtecture-dependent [M]
-    int rt;
-    int rd;
-    int imm;
-    bool halt;
-};
+// MIPS architecture struct
+mips_status_t status;
+status.debug = debug;
+status.mode = mode;
 
 //declare global clock counter, array[5], and circular buffer (5 entries)
 //declare struct for currant instructions
+inst_t instructions[5];
+
 
     //input data from memory image into array?
 
     //enter loop that continues until halt
 
-    while (halt != 1)
+    while (status.halt != true)
     {
         //increment counter
         //parse first instruction into binary
@@ -73,8 +62,8 @@ struct inst
         //execute instruction in EX
 	// also if jump/branch to non-subsequent instruction, flush the pipeline (IF and ID stages) [M]
 
-        //save WB info for instruction in WB
-			//if halt in wb set halt flag
+	memory_stage(instructions, &status, registers, memory);
+	writeback_stage(instructions, &status, registers, memory);
     }
 
 	// We might want to use the halt instruction as a signal to add NOPs to the end of the pipeline such that
@@ -83,12 +72,12 @@ struct inst
 	// to have the halt flag set during the WB stage of the halt instruction, so that the other instructions are
 	// already completed by the time the flag's set [M]
 
+	/*
 	-That makes sense to me, I was picturing a kind of 'clean up' section outside of the loop, but that'd be easier
 	to put it in the WB, I changed the sketch to reflect that [E]
-
-
-
 	*/
+
+
 	/////////////////////////////////////////////////////
 
 	closeFile(addressFile);	// close the input file 
@@ -99,7 +88,7 @@ struct inst
 }
 
 // reads command line and returns debug flag if set
-int getDebug(int index, char* commands[]){
+bool getDebug(int index, char* commands[]){
 
 		for (int i = 1; i < index; i++){
 

@@ -107,16 +107,20 @@ int main(int argc, char** argv)
 	}
 
 
-	printf("\n");
-	for (int i = 0; i < count; i++)
+	if (debug)
 	{
-		if (debug)
+		printf("\n");
+		for (int i = 0; i < count; i++)
 		{
 			printf("Instruction %d: %08X \n", i, instructions[i]);
 		}
+		printf("\n");
+	}
+
+	for (int i = 0; i < count; i++)
+	{
 		fprintf(outputFile, "%08X \n", instructions[i]);
 	}
-	printf("\n");
 
 	closeFile(outputFile);	// close the output file
 

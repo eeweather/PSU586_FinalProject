@@ -98,7 +98,7 @@ int main(int argc, char** argv)
 		if (opcode == ADD || opcode == SUB || opcode == MUL  
 			|| opcode == OR || opcode == AND || opcode == XOR)
 		{
-			r_inst = parse_r_type(temp2, temp3, temp4);
+			r_inst = parse_r_type(temp3, temp4, temp2);
 			r_inst.opcode = opcode;
 			instructions[count] = generate_r_type(r_inst, &count);
 		}
@@ -113,9 +113,9 @@ int main(int argc, char** argv)
 				case ANDI:
 				case XORI:
 				case LDW:
-				case STW:  i_inst = parse_i_type(temp2, temp3, temp4);
+				case STW:  i_inst = parse_i_type(temp3, temp2, temp4);
 					break;
-				case BEQ:  i_inst = parse_i_type(temp3, temp2, temp4);
+				case BEQ:  i_inst = parse_i_type(temp2, temp3, temp4);
 					break;
 				case BZ:   i_inst = parse_i_type(temp2, NULL, temp3);
 					break;

@@ -19,7 +19,7 @@ typedef struct inst
 {
     int binary; //maybe dont need
     char type;
-    opcode_t opcode;
+    int opcode;
     int rs;
     int rt;
     int rd;
@@ -59,7 +59,7 @@ typedef struct mips_status
 } mips_status_t;
 
 int32_t memory[1024];
-instr_t instructions[5];
+inst_t instructions[5];
 int32_t registers[32];
 
 void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[])

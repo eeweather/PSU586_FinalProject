@@ -43,7 +43,13 @@ typedef enum {
 	HALT	= 0x11 
 } opcode_t;
 
-// function prototypes
+struct mips_status
+{
+	uint32_t pc;
+	uint32_t pc_branch;
+};
+
+// function prototypes for main.c
 int getDebug(int index, char* commands[]);
 char* getInputFile(int index, char* commands[]);
 char* getOutputFile(int index, char* commands[]);
@@ -51,5 +57,9 @@ int getMode(int index, char* commands[]);
 FILE* openInputFile(const char* inputFile);
 FILE* openOutputFile(const char* outputFile);
 void closeFile(FILE* inputFile);
+void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
+
+//function prototypes for if.c
+void inst_fetch(int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal);
 
 #endif

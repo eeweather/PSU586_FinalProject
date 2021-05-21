@@ -63,6 +63,7 @@ struct mips_status
     bool     zero_flag;
     bool     jump_flag;
 };
+//initialize pc once at the beginning before we go into main pipelining loop, set to 0 to grab the first line from the input file
 
 
 
@@ -125,6 +126,7 @@ int getDebug(int index, char* commands[]){
 			if (strcmp(commands[i], "-d") == 0){
 				printf("\nDebug mode on\n\n");
 				return ON;
+
 			}
 		}
 

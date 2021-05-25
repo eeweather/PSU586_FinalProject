@@ -58,7 +58,7 @@ typedef struct mips_status
 int32_t registers[32];
 
 
-void execution_stage (struct mips_core *mips_status_t)
+void execution_stage (struct mips_status *mips_status_t)
 {
     
     switch(inst_t->opcode)

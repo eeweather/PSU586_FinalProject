@@ -26,6 +26,7 @@ typedef struct inst
     int imm;
     int valA;
     int valB;
+    bool nop;
     bool regdst; //don't know if anyone needs the control bits but I'm adding them
     bool aluo1;  //can take them out if no one needs them
     bool aluo2;
@@ -64,6 +65,9 @@ int32_t registers[32];
 
 void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[])
 {
+    if nop == true {
+        
+    }
     inst_t current_inst = instructions[IF];
     int signBit;
 
@@ -160,4 +164,6 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
         //I think we have no j instructions in mips light
         break;
     }
+
+    instructions[ID]=current_inst;
 }

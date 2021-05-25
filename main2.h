@@ -91,9 +91,5 @@ int getMode(int index, char* commands[]);
 FILE* openInputFile(const char* inputFile);
 FILE* openOutputFile(const char* outputFile);
 void closeFile(FILE* inputFile);
-void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
-
-//function prototypes for if.c
-void inst_fetch(int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal);
 
 #endif

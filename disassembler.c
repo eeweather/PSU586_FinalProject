@@ -1,5 +1,25 @@
-#include <stdint.h>
+/////////////////////////////////////////////////////////
+//
+//   disassembler.c - MIPS-lite disassembler
+//
+//   Author: Mel Murphy
+//   ECE 586 Spring 2021
+//   
+//   This program will take as input a machine code
+//   file in the MIPS_lite format and output the
+//   equivalent assembly code. The input and output
+//   file names are input.txt and output.txt
+//   respectively. To use alternate input and
+//   output filenames, use the command line syntax
+//   as follows:
+//
+//   ./assembler -i <input_filename> -o <output_filename>
+//
+/////////////////////////////////////////////////////////
+
+
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>

@@ -1,3 +1,29 @@
+/////////////////////////////////////////////////////////
+//
+//   assembler.c - MIPS-lite assembler
+//
+//   Author: Mel Murphy
+//   ECE 586 Spring 2021
+//   
+//   This program will take as input an assembly
+//   code file written in MIPS_lite and output
+//   the equivalent machine code. The input and
+//   output file names are input.txt and output.txt
+//   respectively. To use alternate input and
+//   output filenames, use the command line syntax
+//   as follows:
+//
+//   ./assembler -i <input_filename> -o <output_filename>
+//
+//   The instrutions will use Rx to denote the
+//   registers. For example, and add instrution may
+//   look like:
+//
+//   ADD R3, R1, R2
+//
+/////////////////////////////////////////////////////////
+
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

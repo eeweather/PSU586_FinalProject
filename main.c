@@ -18,8 +18,30 @@ int main(int argc, char *argv[]){
 	char* output = getOutputFile(argc, argv);
 	int mode = getMode(argc, argv);
 
-	FILE* addressFile = openInputFile(input);	// open memory file to read from
-	FILE* outputFile = openOutputFile(output);	// open file to output to
+	FILE* addressFile = openInputFile(input);	// check that we can open memory file to read from
+	FILE* outputFile = openOutputFile(output);	// check that we can open file to output to
+
+	struct mips_status mips_status_struct; //initializing our MIPS status structure - add more components to this as needed in main.h
+	
+	mips_status_struct.pc = 0; //initialize the PC so that we can 
+	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
+
+	//printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
+
+	int32_t registers[32]; //initialize our registers
+	int32_t memory[1024]; //initialize the memory storage array
+
+	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
+
+	registers[1] = 0x12345678; //while coding checking
+
+	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
+
+	inst_fetch(registers, memory, &mips_status_struct, branch_control_signal); //IF stage
+
+	printf("after the inst_fetch function, value of register 1: %x\n", registers[1]); //while coding checking
+	printf("after the inst_fetch function, pc is: %x\n", mips_status_struct.pc); //while coding checking
+
 
 	////////////////////////////////////////////////////
 	/*
@@ -49,6 +71,7 @@ struct inst
 
 // [D] I was also thinking of a struct for the MIPS architecture
 // we could use this to track counts for display, pc and flags etc
+
 struct mips_status
 {
     uint32_t pc;
@@ -63,6 +86,8 @@ struct mips_status
     bool     zero_flag;
     bool     jump_flag;
 };
+
+//initialize pc once at the beginning before we go into main pipelining loop, set to 0 to grab the first line from the input file
 
 
 
@@ -125,6 +150,7 @@ int getDebug(int index, char* commands[]){
 			if (strcmp(commands[i], "-d") == 0){
 				printf("\nDebug mode on\n\n");
 				return ON;
+
 			}
 		}
 
@@ -245,4 +271,30 @@ void closeFile(FILE* inputFile) {
 		printf("\n\nUnable to close file\n\n");
 		return;
 	}
+}
+
+//fill memory array with input values from input file
+void arrayMemImageFill(int32_t* memory_array, FILE* inputFile){
+
+	int32_t maxArray = 1024; //anything larger than 1024 from input file will be treated as an indication that the simulator is not functioning properly, professor gauranteed no larger than 1024 lines (4kB)
+	char temp_input_string[20]; //chose 20 arbitarily by a bit of trial and error to make sure that everything on one line would get pulled in
+	int i = 0; // for incrementing through memory array
+	int temp_number; //for converting from string to number
+
+		while(fgets(temp_input_string, sizeof(temp_input_string), inputFile) != NULL){
+			temp_number = (int32_t) strtol(temp_input_string, NULL, 16); // convert with number base 16
+			memory_array[i] = temp_number; //place each line into each mem location as number value
+			printf("mem value %x from line %d\n", memory_array[i], i);
+			i++;
+		}
+
+		if(i <= maxArray){
+			printf("End of input file has been reached. %d lines have been read into memory array.\n", i); //fyi for user
+		}
+		else{
+			printf("Input file seems to have more than 1024 lines. Please debug. %d lines have been read into memory array.\n", i); //fyi for user
+		}
+
+
+	return;
 }

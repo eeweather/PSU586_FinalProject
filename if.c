@@ -37,14 +37,18 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, stru
     //printf("value of pc from struct passed into if is %d and pc_branch is %d\n", status_struct->pc, status_struct->pc_branch);
 
     pc_to_fetch = mux_pc(status_struct, branch_signal); //choose pc to fetch (branch or not)
+    printf("pc to fetch: %d\n",pc_to_fetch);
 
     current_instruction.binary = memory[pc_to_fetch]; //gather data from memory at chosen pc
 
+
     increment_pc(status_struct); //increment pc assuming no branch for next instruction
+
 
     //printf("after incrementing pc is %d\n", status_struct->pc); //for debug checking while codeing
 
     instructions[ID]=current_instruction;
+
     return;
 }
 

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	mips_status_struct.pc = 0;		  //initialize the PC so that we can
 	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
 
-	//printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
+	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
 
 	int32_t registers[32];	//initialize our registers
 	int32_t memory[1024];	//initialize the memory storage array
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
 
-	registers[1] = 0x12345678; //while coding checking
+	//registers[1] = 0x12345678; //while coding checking
 
 	//all stages start locked except IF
 	bool iflock = false;
@@ -45,8 +45,9 @@ int main(int argc, char *argv[])
 	bool memlock = true;
 	bool wblock = true;
 
+	memset(registers, 0, 32);//set registers to 0 to begin
 	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
-	int i = 7;
+	int i = 12;
 
 	while (i > 0 /*mips_status_struct.halt!=TRUE*/)
 	{
@@ -54,12 +55,15 @@ int main(int argc, char *argv[])
 		{
 			printf("in WB\n");
 			writeback_stage(instructions, &mips_status_struct, registers, memory);
+			printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
+
 		}
 
 		if (!memlock)
 		{
 			printf("in MEM\n");
 			memory_stage(instructions, &mips_status_struct, registers, memory);
+			printf("after the mem function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			wblock = false;
 		}
 
@@ -67,6 +71,7 @@ int main(int argc, char *argv[])
 		{
 			printf("in EX\n");
 			execution_stage(instructions, &mips_status_struct, registers);
+			printf("after the ex function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			memlock = false;
 		}
 		//printf("binary of instruction in ID: %x\n", instructions[ID].binary);
@@ -75,6 +80,7 @@ int main(int argc, char *argv[])
 		{
 			printf("in ID\n");
 			id_stage(instructions, &mips_status_struct, registers, memory);
+			printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			exlock = false;
 		}
 
@@ -82,6 +88,7 @@ int main(int argc, char *argv[])
 		{
 			printf("in IF\n");
 			inst_fetch(instructions, registers, memory, &mips_status_struct, branch_control_signal); //IF stage
+			printf("after the if function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			idlock = false;
 		}
 
@@ -90,7 +97,6 @@ int main(int argc, char *argv[])
 		printf("i is: %d\n", i);
 		i--;
 	}
-
 
 	closeFile(addressFile); // close the input file
 	closeFile(outputFile);	// close the output file

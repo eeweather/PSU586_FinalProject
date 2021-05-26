@@ -17,11 +17,11 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
-		mips_status->pc = alu_temp;
+		//mips_status->pc = alu_temp;
 	}
 	else
 	{	// if no jump, update to new program counter value	
-		mips_status->pc = mips_status->npc;
+		//mips_status->pc = mips_status->npc;
 	}
 
 	instructions[WB]=instructions[MEM];
@@ -37,27 +37,44 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 
 	if (opcode == LDW)
 	{	// store value from memory to register if register is not R0
+
 		if (instructions[WB].rt_i_type != 0)
 		{
 			registers[instructions[WB].rt_i_type] = mips_status->mem_reg;
 		}
 	}
 	else if (opcode == ADD  // if R-type instruction
-		|| opcode == ADDI
 		|| opcode == SUB
-		|| opcode == SUBI
 		|| opcode == MUL
-		|| opcode == MULI
 		|| opcode == OR
-		|| opcode == ORI
 		|| opcode == AND
-		|| opcode == ANDI
-		|| opcode == XOR
-		|| opcode == XORI)
+		|| opcode == XOR)
 	{	// write result to register unless register is R0
+
 		if (instructions[WB].rd_r_type != 0)
 		{
+			// printf("what is in WB %c\n",instructions[WB].type);
+			// printf("What register to write to: %d\n",instructions[WB].rd_r_type);
+			
 			registers[instructions[WB].rd_r_type] = alu_temp;
+			
+		}
+	}
+	else if (opcode == ADDI
+		|| opcode == SUBI
+		|| opcode == MULI
+		|| opcode == ORI
+		|| opcode == ANDI
+		|| opcode == XORI)
+	{
+		// i type instruction
+		if(instructions[WB].rt_i_type !=0){
+			
+			// printf("what is in WB %c\n",instructions[WB].type);
+			// printf("What register to write to: %d\n",instructions[WB].rd_r_type);
+			
+			registers[instructions[WB].rt_i_type] = alu_temp;
+			
 		}
 	}
 	else if (opcode == HALT)

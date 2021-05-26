@@ -28,7 +28,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
         current_inst.rd_r_type = (current_inst.binary >> 11) & 0x0000001F;
         current_inst.rt_r_type = (current_inst.binary >> 16) & 0x0000001F;
         current_inst.rs_r_type = (current_inst.binary >> 21) & 0x0000001F;
-        // printf(" in r type, current rd %x\n", current_inst.rd_r_type);
+        printf(" in r type, current rd %x\n", current_inst.rd_r_type);
         // printf("current rt %d\n", current_inst.rt_r_type);
         // printf("current rs %d\n", current_inst.rs_r_type);
 

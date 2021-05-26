@@ -20,8 +20,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (ADD):
         mips_status_t->alu_temp = registers[current_int.rs_r_type] + registers[current_int.rt_r_type];
         //printf("Value of Temp register in ADD: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_arith++;
         mips_status_t->count_total++;
         break;
@@ -31,8 +31,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (ADDI):
         mips_status_t->alu_temp = registers[current_int.rs_i_type] + current_int.imm_i_type;
         //printf("Value of Temp register in ADDI: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_arith++;
         mips_status_t->count_total++;
         break;
@@ -42,8 +42,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (SUB):
         mips_status_t->alu_temp = registers[current_int.rs_r_type] - registers[current_int.rt_r_type];
         //printf("Value of Temp register in SUB: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_arith++;
         mips_status_t->count_total++;
         break;
@@ -53,8 +53,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (SUBI):
         mips_status_t->alu_temp = registers[current_int.rs_i_type] - current_int.imm_i_type;
         //printf("Value of Temp register in SUBI: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_arith++;
         mips_status_t->count_total++;
         break;
@@ -64,8 +64,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (MUL):
         mips_status_t->alu_temp = registers[current_int.rs_r_type] * registers[current_int.rt_r_type];
         //printf("Value of Temp register in MUL: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_arith++;
         mips_status_t->count_total++;
         break;
@@ -75,8 +75,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (MULI):
         mips_status_t->alu_temp = registers[current_int.rs_i_type] * current_int.imm_i_type;
         //printf("Value of Temp register in MULI: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_arith++;
         mips_status_t->count_total++;
         break;
@@ -86,8 +86,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (OR):
         mips_status_t->alu_temp = registers[current_int.rs_r_type] | registers[current_int.rt_r_type];
         //printf("Value of Temp register in logical OR: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_logic++;
         mips_status_t->count_total++;
         break;
@@ -97,8 +97,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (ORI):
         mips_status_t->alu_temp = registers[current_int.rs_i_type] | current_int.imm_i_type;
         //printf("Value of Temp register in logical ORI: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_logic++;
         mips_status_t->count_total++;
         break;
@@ -108,8 +108,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (AND):
         mips_status_t->alu_temp = registers[current_int.rs_r_type] & registers[current_int.rt_r_type];
         //printf("Value of Temp register in logical AND: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_logic++;
         mips_status_t->count_total++;
         break;
@@ -119,8 +119,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (ANDI):
         mips_status_t->alu_temp = registers[current_int.rs_i_type] & current_int.imm_i_type;
         //printf("Value of Temp register in logical ANDI: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_logic++;
         mips_status_t->count_total++;
         break;
@@ -130,8 +130,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (XOR):
         mips_status_t->alu_temp = registers[current_int.rs_r_type] ^ registers[current_int.rt_r_type];
         //printf("Value of Temp register in logical XOR: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_logic++;
         mips_status_t->count_total++;
         break;
@@ -141,8 +141,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (XORI):
         mips_status_t->alu_temp = registers[current_int.rs_i_type] ^ current_int.imm_i_type;
         //printf("Value of Temp register in logical XORI: %d\n", mips_status_t->alu_temp);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_logic++;
         mips_status_t->count_total++;
         break;
@@ -159,8 +159,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
         // printf("Final value of the mem_reg variable: %d\n", mips_status_t->mem_reg);
         mips_status_t->mem_reg = (mips_status_t->mem_reg / 4);
         //printf("Final value of the mem_reg variable after dividing it by 4: %d\n", mips_status_t->mem_reg);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_total++;
         mips_status_t->count_memory_access++;
         break;
@@ -171,8 +171,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (STW):
         mips_status_t->mem_reg = registers[current_int.rs_i_type] + current_int.imm_i_type;
         mips_status_t->mem_reg = (mips_status_t->mem_reg / 4);
-        mips_status_t->pc = mips_status_t->pc + 1;
-        mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+        // mips_status_t->pc = mips_status_t->pc + 1;
+        // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
         mips_status_t->count_total++;
         mips_status_t->count_memory_access++;
         break;
@@ -192,8 +192,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
         else
         {
             //printf("Branch BZ is not taken\n");
-            mips_status_t->pc = mips_status_t->pc + 1;
-            mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+            // mips_status_t->pc = mips_status_t->pc + 1;
+            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status_t->count_control_flow++;
             mips_status_t->count_total++;
         }
@@ -214,8 +214,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
         else
         {
             //printf("Branch BEQ is not taken\n");
-            mips_status_t->pc = mips_status_t->pc + 1;
-            mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
+            // mips_status_t->pc = mips_status_t->pc + 1;
+            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status_t->count_control_flow++;
             mips_status_t->count_total++;
         }
@@ -226,8 +226,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     case (JR):
         mips_status_t->jump_flag = true;
         //printf(" Unconditional Branch is taken\n");
-        mips_status_t->temp_pc = registers[current_int.rs_i_type];
-        mips_status_t->pc = (mips_status_t->temp_pc / 4);
+        // mips_status_t->temp_pc = registers[current_int.rs_i_type];
+        // mips_status_t->pc = (mips_status_t->temp_pc / 4);
         mips_status_t->count_control_flow++;
         mips_status_t->count_total++;
         break;
@@ -237,6 +237,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
         printf("Default Case reached in Execute Stage.  Something isn't working.\n");
         break;
     }
+    printf("current pc: %d\n",mips_status_t->pc);
     instructions[MEM] = current_int;
     return;
 }

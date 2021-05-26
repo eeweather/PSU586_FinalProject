@@ -52,14 +52,23 @@ typedef enum {
 	HALT	= 0x11 
 } opcode_t;
 
+//instruction structs
 typedef struct inst
 {
+    uint32_t binary; //maybe dont need
     char type;
     opcode_t opcode;
-    int rs;
-    int rt;
-    int rd;
-    int imm;
+    uint32_t rs_r_type;  //created separate rs and rt for instruction types
+    uint32_t rt_r_type;
+    uint32_t rd_r_type;
+    uint32_t rs_i_type;
+    uint32_t rt_i_type;
+    uint32_t imm_i_type;
+    int valA;
+    int valB;
+    bool nop;
+    bool branch;
+    bool halt;
 } inst_t;
 
 // MIPS architecture struct
@@ -93,7 +102,12 @@ FILE* openOutputFile(const char* outputFile);
 void closeFile(FILE* inputFile);
 void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
 
-//function prototypes for if.c
-void inst_fetch(int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal);
+//function prototypes for pipeline stages
+void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal);
+void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[]);
+void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, int32_t registers[]);
+void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[]);
+void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[]);
+
 
 #endif

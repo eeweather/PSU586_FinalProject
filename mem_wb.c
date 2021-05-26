@@ -5,7 +5,6 @@
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[])
 {
 	opcode_t opcode = instructions[MEM].opcode;
-	uint8_t rt = instructions[MEM].rt;
 	uint32_t alu_temp = mips_status->alu_temp;
 
 	if (opcode == LDW)	// load instruction
@@ -14,7 +13,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	}
 	else if (opcode == STW)	// store instruction
 	{	// store contents of register to memory address
-		memory[alu_temp>>2] = registers[rt];
+		memory[alu_temp>>2] = registers[instructions[MEM].rt_i_type];
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
@@ -25,6 +24,8 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		mips_status->pc = mips_status->npc;
 	}
 
+	instructions[WB]=instructions[MEM];
+
 	return;
 }
 
@@ -32,15 +33,13 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[])
 {
 	opcode_t opcode = instructions[WB].opcode;
-	uint8_t rt = instructions[WB].rt;
-	uint8_t rd = instructions[WB].rd;
 	uint32_t alu_temp = mips_status->alu_temp;
 
 	if (opcode == LDW)
 	{	// store value from memory to register if register is not R0
-		if (rt != 0)
+		if (instructions[WB].rt_i_type != 0)
 		{
-			registers[rt] = mips_status->mem_reg;
+			registers[instructions[WB].rt_i_type] = mips_status->mem_reg;
 		}
 	}
 	else if (opcode == ADD  // if R-type instruction
@@ -56,9 +55,9 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 		|| opcode == XOR
 		|| opcode == XORI)
 	{	// write result to register unless register is R0
-		if (rd != 0)
+		if (instructions[WB].rd_r_type != 0)
 		{
-			registers[rd] = alu_temp;
+			registers[instructions[WB].rd_r_type] = alu_temp;
 		}
 	}
 	else if (opcode == HALT)

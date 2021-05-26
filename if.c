@@ -26,23 +26,25 @@ void increment_pc(struct mips_status* status_struct);
 //instruction fetch function to be accessible in main.c
 //pass in: filename, mainc structure with pc and pc_branch, control signal, pointer to register array
 //pass out: register with needed value, R1 for now
-void inst_fetch(int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal){
+void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal){
 
     uint32_t pc_to_fetch;
     int32_t pc_mem_contents;
+    inst_t current_instruction;
 
-    printf("initial value of register 1: %x\n", registers[1]);
-    printf("first memory value from input file: %x\n", memory[0]);
-    printf("value of pc from struct passed into if is %d and pc_branch is %d\n", status_struct->pc, status_struct->pc_branch);
+    //printf("initial value of register 1: %x\n", registers[1]);
+    //printf("first memory value from input file: %x\n", memory[0]);
+    //printf("value of pc from struct passed into if is %d and pc_branch is %d\n", status_struct->pc, status_struct->pc_branch);
 
     pc_to_fetch = mux_pc(status_struct, branch_signal); //choose pc to fetch (branch or not)
 
-    registers[1] = memory[pc_to_fetch]; //gather data from memory at chosen pc
+    current_instruction.binary = memory[pc_to_fetch]; //gather data from memory at chosen pc
 
     increment_pc(status_struct); //increment pc assuming no branch for next instruction
 
-    printf("after incrementing pc is %d\n", status_struct->pc); //for debug checking while codeing
+    //printf("after incrementing pc is %d\n", status_struct->pc); //for debug checking while codeing
 
+    instructions[ID]=current_instruction;
     return;
 }
 
@@ -56,7 +58,7 @@ uint32_t mux_pc(struct mips_status* status_struct, int32_t branch_signal){
 
     if(status_struct->pc == 0){ //check if this is the first line to intake, if so, then we don't need to check if we should take branch, always take line 0
         chosen_pc_temp = status_struct->pc;
-        printf("first line taken so no mux action\n");
+        //printf("first line taken so no mux action\n");
     }
     else{
         if(branch_signal == 1){
@@ -72,7 +74,7 @@ uint32_t mux_pc(struct mips_status* status_struct, int32_t branch_signal){
     }
 
     status_struct->pc = chosen_pc_temp; //write the chosen value into the status struct to make sure that the right incrementation happens at the end of IF
-    printf("will return a pc choice of: %d\n", chosen_pc_temp);
+    //printf("will return a pc choice of: %d\n", chosen_pc_temp);
     return chosen_pc_temp;
 }
 

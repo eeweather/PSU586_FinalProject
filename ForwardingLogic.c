@@ -62,6 +62,7 @@ int main()
         {
             run WB
         }
+
         if (!memlock)
         {
             run MEM
@@ -90,7 +91,7 @@ int main()
 
         if (!iflock)
         {
-             if(stall1)
+            if(stall1)
                 NOP
             else if (stall2)
                 stall1 = true 

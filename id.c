@@ -129,7 +129,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
     case JR:
     case HALT:
         current_inst.type = 'i';
-        current_inst.imm = (current_inst.binary) & 0x00001FFF;
+        current_inst.imm = (current_inst.binary) & 0x0000FFFF;
         current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
         current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
         // printf(" in i type, current imm %d\n", current_inst.imm);

@@ -13,7 +13,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	}
 	else if (opcode == STW)	// store instruction
 	{	// store contents of register to memory address
-		memory[alu_temp>>2] = registers[instructions[MEM].rt_i_type];
+		memory[alu_temp>>2] = registers[instructions[MEM].rt];
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
@@ -38,9 +38,9 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	if (opcode == LDW)
 	{	// store value from memory to register if register is not R0
 
-		if (instructions[WB].rt_i_type != 0)
+		if (instructions[WB].rt != 0)
 		{
-			registers[instructions[WB].rt_i_type] = mips_status->mem_reg;
+			registers[instructions[WB].rt] = mips_status->mem_reg;
 		}
 	}
 	else if (opcode == ADD  // if R-type instruction
@@ -51,12 +51,12 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 		|| opcode == XOR)
 	{	// write result to register unless register is R0
 
-		if (instructions[WB].rd_r_type != 0)
+		if (instructions[WB].rd != 0)
 		{
 			// printf("what is in WB %c\n",instructions[WB].type);
-			// printf("What register to write to: %d\n",instructions[WB].rd_r_type);
+			// printf("What register to write to: %d\n",instructions[WB].rd);
 			
-			registers[instructions[WB].rd_r_type] = alu_temp;
+			registers[instructions[WB].rd] = alu_temp;
 			
 		}
 	}
@@ -68,12 +68,12 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 		|| opcode == XORI)
 	{
 		// i type instruction
-		if(instructions[WB].rt_i_type !=0){
+		if(instructions[WB].rt !=0){
 			
 			// printf("what is in WB %c\n",instructions[WB].type);
-			// printf("What register to write to: %d\n",instructions[WB].rd_r_type);
+			// printf("What register to write to: %d\n",instructions[WB].rd);
 			
-			registers[instructions[WB].rt_i_type] = alu_temp;
+			registers[instructions[WB].rt] = alu_temp;
 			
 		}
 	}

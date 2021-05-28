@@ -51,7 +51,10 @@ int main(int argc, char *argv[])
 
 	hazard_flag = false;
 
-	memset(registers, 0, 32);//set registers to 0 to begin
+	for (int i = 0; i < 32; i++)
+	{
+		registers[i] = 0;		// initialize registers to 0
+	}
 	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
 	int i = 12;
 

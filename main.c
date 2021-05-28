@@ -49,14 +49,20 @@ int main(int argc, char *argv[])
 	bool memlock = true;
 	bool wblock = true;
 
-	hazard_flag = false;
+	hazard_flag = false; //initialize hazard flag
 
-	for (int i = 0; i < 32; i++)
-	{
-		registers[i] = 0;		// initialize registers to 0
+	instructions[IF].nop = false; //don't expect a nop into IF (using the hazard flag instead of the nop for the stalls in IF)
+	instructions[ID].nop = true;
+	instructions[EX].nop = true;
+	instructions[MEM].nop = true;
+	instructions[WB].nop = true;
+
+	for(int j=0; j<32; j++){
+		registers[j] = 0; //set registers to 0 to begin
 	}
-	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
-	int i = 12;
+
+	int i = arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
+
 
 	while (i > 0 /*mips_status_struct.halt!=TRUE*/)
 	{
@@ -65,7 +71,6 @@ int main(int argc, char *argv[])
 			printf("in WB\n");
 			writeback_stage(instructions, &mips_status_struct, registers, regChange);
 			printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-
 		}
 
 		if (!memlock)
@@ -96,7 +101,7 @@ int main(int argc, char *argv[])
 		if (!iflock)
 		{
 			printf("in IF\n");
-			inst_fetch(instructions, registers, memory, &mips_status_struct, branch_control_signal); //IF stage
+			inst_fetch(instructions, registers, memory, &mips_status_struct, branch_control_signal, &hazard_flag); //IF stage
 			printf("after the if function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			idlock = false;
 		}
@@ -271,7 +276,7 @@ void closeFile(FILE *inputFile)
 }
 
 //fill memory array with input values from input file
-void arrayMemImageFill(int32_t *memory_array, FILE *inputFile)
+int arrayMemImageFill(int32_t *memory_array, FILE *inputFile)
 {
 
 	int32_t maxArray = 1024;	//anything larger than 1024 from input file will be treated as an indication that the simulator is not functioning properly, professor gauranteed no larger than 1024 lines (4kB)
@@ -296,5 +301,5 @@ void arrayMemImageFill(int32_t *memory_array, FILE *inputFile)
 		printf("Input file seems to have more than 1024 lines. Please debug. %d lines have been read into memory array.\n", i); //fyi for user
 	}
 
-	return;
+	return i;
 }

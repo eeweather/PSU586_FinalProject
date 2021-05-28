@@ -4,6 +4,7 @@
 // MEM stage of pipeline
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
 {
+	instructions[MEM] = instructions[EX];
 	opcode_t opcode = instructions[MEM].opcode;
 	uint32_t alu_temp = mips_status->alu_temp;
 
@@ -25,7 +26,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		mips_status->pc = mips_status->npc;
 	}
 
-	instructions[WB]=instructions[MEM];
+
 
 	return;
 }
@@ -33,6 +34,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 // WB stage of pipeline
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[])
 {
+	instructions[WB]=instructions[MEM];
 	opcode_t opcode = instructions[WB].opcode;
 	uint32_t alu_temp = mips_status->alu_temp;
 

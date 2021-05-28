@@ -26,26 +26,23 @@ void increment_pc(struct mips_status* status_struct);
 //instruction fetch function to be accessible in main.c
 //pass in: filename, mainc structure with pc and pc_branch, control signal, pointer to register array
 //pass out: register with needed value, R1 for now
-void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal){
+void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal, bool* hazard_flag){
 
-    //int32_t pc_mem_contents;
     inst_t current_instruction;
-
-    //printf("initial value of register 1: %x\n", registers[1]);
-    //printf("first memory value from input file: %x\n", memory[0]);
-    //printf("value of pc from struct passed into if is %d and pc_branch is %d\n", status_struct->pc, status_struct->pc_branch);
 
     printf("pc to fetch: %d\n", status_struct->pc);
 
+    if(*hazard_flag == true){
+        printf("hazard was set => not pulling mem into IF*************\n");
+    }
+    else{
     current_instruction.binary = memory[status_struct->pc>>2]; //gather data from memory at chosen pc
 
     increment_pc(status_struct); //increment pc assuming no branch for next instruction
 
-    //printf("after incrementing pc is %d\n", status_struct->pc); //for debug checking while codeing
-
     instructions[IF].binary = current_instruction.binary;
-    instructions[ID] = instructions[IF];
-
+    
+    }
     //printf("in IF, printinf instructions[ID] %x\n", instructions[ID].binary);
     //printf("in IF, printinf instructions[IF] %x\n", instructions[IF].binary);
 

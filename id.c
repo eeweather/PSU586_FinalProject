@@ -2,14 +2,19 @@
 
 void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], bool* hazard_flag)
 {
-    inst_t current_inst;
-    current_inst = instructions[ID];
-    *hazard_flag = false;
-    printf("in ID, printinf instructions[IF] %x\n", instructions[IF].binary);
+
+    //printf("hazard flag value at the beginning of ID: ");
+    //printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
+
+    if(*hazard_flag != true){
+        inst_t current_inst;
+        instructions[ID] = instructions[IF];
+        current_inst = instructions[ID];
 
 
+    
         current_inst.opcode = (current_inst.binary >> 26) & 0x0000003F;
-
+    
         //printf("current opcode is %x\n", current_inst.opcode);
 
         int signBit;
@@ -17,17 +22,6 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
         switch (current_inst.opcode)
         {
         case ADD:
-            current_inst.type = 'r';
-            current_inst.rd = (current_inst.binary >> 11) & 0x0000001F;
-            current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
-            current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
-            printf(" in r type, current rd %x\n", current_inst.rd);
-
-            current_inst.valA = registers[current_inst.rs];
-            current_inst.valB = registers[current_inst.rt];
-
-            current_inst.branch = 0;
-
         case SUB:
         case MUL:
         case OR:
@@ -133,22 +127,22 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
             }
             break;
         }
-
+    
         instructions[ID] = current_inst;
-
+    }
 
 
         //RAW HAZARD Detection //
     // Check to see if the either source register in ID matches the destionation registers in EX or MEM
     // Also check to make sure the destionation registers aren't just R0
     // If true,  trigger the raw flag indicating the hazard
-    printf("source: %d & previous EX destination: %d & previous MEM destination: %d\n", instructions[ID].rs, instructions[EX].rd, instructions[MEM].rd);
+    *hazard_flag = false;
+    //printf("source: %d & previous EX destination: %d & previous MEM destination: %d\n", instructions[ID].rs, instructions[EX].rd, instructions[MEM].rd);
     if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)) {
         // enable forwarding - RS in ID conflicts with RD in EX stage
         // If not a LDW command then enable forwarding for RS
         *hazard_flag = true;
 
-        //printf("source: %d & previous destination: %d\n", instructions[ID].rs, instructions[EX].rd);
         printf("hazard_flag set---------------\n");
         
         if(mips_status->mode == 2){
@@ -159,28 +153,57 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
             }
         }
     }
-    if ((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
+    else if ((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
         //enable forwarding - RS in ID stage conflicts with RD in MEM stage
         //enable fowarding for RS from the MEM stage
         *hazard_flag = true;
+
+        printf("hazard_flag set---------------\n");
+
+        if(mips_status->mode == 2){
+            *hazard_flag = false;
+        }
+    }
+    else if ((instructions[ID].rt == instructions[EX].rd) && (instructions[EX].rd != 0)) {
+        // enable forwarding - RT in ID conflicts with RD in EX stage
+        // If not a LDW command then enable forwarding for RS
+        *hazard_flag = true;
+
+        printf("hazard_flag set---------------\n");
+        
+        if(mips_status->mode == 2){
+            if (instructions[EX].opcode == LDW){  //if it is a LDW command, then wait a cycle
+                *hazard_flag = true;
+            } else {
+                *hazard_flag = false;
+            }
+        }
+    }
+    else if((instructions[ID].rt == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
+        //enable forwarding - RT in ID stage conflicts with RD in MEM stage
+        //enable fowarding for RT from the MEM stage
+        *hazard_flag = true;
+
+        printf("hazard_flag set---------------\n");
+
         if(mips_status->mode == 2){
             *hazard_flag = false;
         }
     }
 
-    printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
+    //printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
 
-    if(current_inst.nop == true || *hazard_flag == true)
+    if(instructions[ID].nop == true || *hazard_flag == true)
     {
         //do nothing
-        //current_inst.nop = true;
-        printf("nop in ID---------------\n");
+        instructions[ID].nop = true;
+        //printf("nop in ID---------------\n");
     }
     else{
-        current_inst.nop = false;
+        instructions[ID].nop = false;
         *hazard_flag = false;
-        instructions[EX] = instructions[ID];
     }
+
 
     return;
 }

@@ -58,10 +58,10 @@ typedef struct inst
     uint32_t binary; //maybe dont need
     char type;
     opcode_t opcode;
-    uint32_t rs;  //removed separate rs and rt for instruction types
-    uint32_t rt;
-    uint32_t rd;
-    uint32_t imm;
+    int rs;  //removed separate rs and rt for instruction types
+    int rt;
+    int rd;
+    int imm;
     int valA;
     int valB;
     bool nop;

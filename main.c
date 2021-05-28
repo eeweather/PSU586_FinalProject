@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 
 	mips_status_struct.mode = mode;
 	mips_status_struct.debug = debug;
+	mips_status_struct.npc = 0;
 	mips_status_struct.pc = 0;		  //initialize the PC so that we can
 	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
 	mips_status_struct.jump_flag = FALSE;

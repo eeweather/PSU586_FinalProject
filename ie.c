@@ -185,7 +185,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
             mips_status_t->zero_flag = true;
             //printf("Conditional BZ  Branch is taken\n");
             mips_status_t->pc = (current_int.imm + mips_status_t->pc);
-            mips_status_t->temp_pc = (mips_status_t->pc * 4);
+            mips_status_t->temp_pc = (mips_status_t->pc << 2);
             mips_status_t->count_control_flow++;
             mips_status_t->count_total++;
         }
@@ -207,7 +207,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
             mips_status_t->zero_flag = true;
             //printf("Conditional BEQ Branch is taken\n");
             mips_status_t->pc = (current_int.imm + mips_status_t->pc);
-            mips_status_t->temp_pc = (mips_status_t->pc * 4);
+            mips_status_t->temp_pc = (mips_status_t->pc << 2);
             mips_status_t->count_control_flow++;
             mips_status_t->count_total++;
         }

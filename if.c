@@ -28,7 +28,6 @@ void increment_pc(struct mips_status* status_struct);
 //pass out: register with needed value, R1 for now
 void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal){
 
-    uint32_t pc_to_fetch;
     //int32_t pc_mem_contents;
     inst_t current_instruction;
 
@@ -36,10 +35,9 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, stru
     //printf("first memory value from input file: %x\n", memory[0]);
     //printf("value of pc from struct passed into if is %d and pc_branch is %d\n", status_struct->pc, status_struct->pc_branch);
 
-    pc_to_fetch = mux_pc(status_struct, branch_signal); //choose pc to fetch (branch or not)
-    printf("pc to fetch: %d\n",pc_to_fetch);
+    printf("pc to fetch: %d\n", status_struct->pc);
 
-    current_instruction.binary = memory[pc_to_fetch]; //gather data from memory at chosen pc
+    current_instruction.binary = memory[status_struct->pc>>2]; //gather data from memory at chosen pc
 
 
     increment_pc(status_struct); //increment pc assuming no branch for next instruction
@@ -88,9 +86,11 @@ void increment_pc(struct mips_status* status_struct){
 
     uint32_t temp;
 
-    temp = status_struct->pc;
-    temp = temp + 1; //this is equivalent to incrementing by 4 Bytes since 1 line in the input file is equal to 4 Bytes
-    status_struct->pc = temp;
+	status_struct->npc = status_struct->pc + 4;
+
+//    temp = status_struct->pc;
+ //   temp = temp + 1; //this is equivalent to incrementing by 4 Bytes since 1 line in the input file is equal to 4 Bytes
+  //  status_struct->pc = temp;
 
     return;
 }

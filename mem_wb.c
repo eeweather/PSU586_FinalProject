@@ -2,7 +2,7 @@
 #include "mem_wb.h"
 
 // MEM stage of pipeline
-void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[])
+void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
 {
 	opcode_t opcode = instructions[MEM].opcode;
 	uint32_t alu_temp = mips_status->alu_temp;
@@ -14,6 +14,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	else if (opcode == STW)	// store instruction
 	{	// store contents of register to memory address
 		memory[alu_temp>>2] = registers[instructions[MEM].rt];
+		memChange[alu_temp>>2] = true;
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
@@ -30,7 +31,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 }
 
 // WB stage of pipeline
-void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[])
+void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[])
 {
 	opcode_t opcode = instructions[WB].opcode;
 	uint32_t alu_temp = mips_status->alu_temp;
@@ -41,6 +42,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 		if (instructions[WB].rt != 0)
 		{
 			registers[instructions[WB].rt] = mips_status->mem_reg;
+			regChange[instructions[WB].rt] = true;
 		}
 	}
 	else if (opcode == ADD  // if R-type instruction
@@ -57,6 +59,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 			// printf("What register to write to: %d\n",instructions[WB].rd);
 			
 			registers[instructions[WB].rd] = alu_temp;
+			regChange[instructions[WB].rd] = true;
 			
 		}
 	}
@@ -74,6 +77,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 			// printf("What register to write to: %d\n",instructions[WB].rd);
 			
 			registers[instructions[WB].rt] = alu_temp;
+			regChange[instructions[WB].rt] = true;
 			
 		}
 	}

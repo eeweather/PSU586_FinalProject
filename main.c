@@ -32,7 +32,9 @@ int main(int argc, char *argv[])
 	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
 
 	int32_t registers[32];	//initialize our registers
+	bool regChange[32];
 	int32_t memory[1024];	//initialize the memory storage array
+	bool memChange[1024];
 	inst_t instructions[5]; //initializing instruction array
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
@@ -55,7 +57,7 @@ int main(int argc, char *argv[])
 		if (!wblock)
 		{
 			printf("in WB\n");
-			writeback_stage(instructions, &mips_status_struct, registers, memory);
+			writeback_stage(instructions, &mips_status_struct, registers, regChange);
 			printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 
 		}
@@ -63,7 +65,7 @@ int main(int argc, char *argv[])
 		if (!memlock)
 		{
 			printf("in MEM\n");
-			memory_stage(instructions, &mips_status_struct, registers, memory);
+			memory_stage(instructions, &mips_status_struct, registers, memory, memChange);
 			printf("after the mem function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			wblock = false;
 		}
@@ -98,6 +100,13 @@ int main(int argc, char *argv[])
 		printf("i is: %d\n", i);
 		i--;
 	}
+
+//	printInstructionsByType(arith, logi, mem, ctl);
+//	printRegPcStates(reg, regChange, pc);
+//	printMemStates(mem, memChange);
+//	printNoForwardingHazards(nfHazards, totalStall, totalCycles);
+//	printForwardingHazards(fHazards, totalStall, totalCycles);
+//	printSpeedupAchieved(nfCycles, fCycles);
 
 	closeFile(addressFile); // close the input file
 	closeFile(outputFile);	// close the output file

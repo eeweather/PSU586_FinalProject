@@ -58,10 +58,10 @@ typedef struct inst
     uint32_t binary; //maybe dont need
     char type;
     opcode_t opcode;
-    uint32_t rs;  //removed separate rs and rt for instruction types
-    uint32_t rt;
-    uint32_t rd;
-    uint32_t imm;
+    int rs;  //removed separate rs and rt for instruction types
+    int rt;
+    int rd;
+    int imm;
     int valA;
     int valB;
     bool nop;
@@ -104,8 +104,8 @@ void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
 void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal);
 void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[]);
 void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, int32_t registers[]);
-void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[]);
-void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[]);
+void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[]);
+void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[]);
 
 
 #endif

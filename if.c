@@ -29,7 +29,7 @@ void increment_pc(struct mips_status* status_struct);
 void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal){
 
     uint32_t pc_to_fetch;
-    int32_t pc_mem_contents;
+    //int32_t pc_mem_contents;
     inst_t current_instruction;
 
     //printf("initial value of register 1: %x\n", registers[1]);

@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 	mips_status_struct.debug = debug;
 	mips_status_struct.pc = 0;		  //initialize the PC so that we can
 	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
+	mips_status_struct.jump_flag = FALSE;
 
 	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
 

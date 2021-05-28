@@ -17,7 +17,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
-		//mips_status->pc = alu_temp;
+		mips_status->pc = alu_temp;
 	}
 	else
 	{	// if no jump, update to new program counter value	

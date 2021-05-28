@@ -1,131 +1,186 @@
 #include "main.h"
 
-void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[])
+void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], bool* hazard_flag)
 {
     inst_t current_inst;
     current_inst = instructions[ID];
-
-    if (current_inst.nop == true)
-    {
-        //do nothing
-    }
+    *hazard_flag = false;
+    printf("in ID, printinf instructions[IF] %x\n", instructions[IF].binary);
 
 
-    current_inst.opcode = (current_inst.binary >> 26) & 0x0000003F;
+        current_inst.opcode = (current_inst.binary >> 26) & 0x0000003F;
 
-    //printf("current opcode is %x\n", current_inst.opcode);
+        //printf("current opcode is %x\n", current_inst.opcode);
 
-    int signBit;
+        int signBit;
 
-    switch (current_inst.opcode)
-    {
-    case ADD:
-    case SUB:
-    case MUL:
-    case OR:
-    case AND:
-    case XOR:
-        current_inst.type = 'r';
-        current_inst.rd = (current_inst.binary >> 11) & 0x0000001F;
-        current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
-        current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
-        printf(" in r type, current rd %x\n", current_inst.rd);
-        // printf("current rt %d\n", current_inst.rt);
-        // printf("current rs %d\n", current_inst.rs);
-
-        current_inst.valA = registers[current_inst.rs];
-        current_inst.valB = registers[current_inst.rt];
-
-        //r command control bits, remove if not using
-        // current_inst.regdst = 1;
-        // current_inst.aluo1 = 1;
-        // current_inst.aluo2 = 0;
-        // current_inst.aluscr = 0;
-        current_inst.branch = 0;
-        // current_inst.memread = 0;
-        // current_inst.memwrite = 0;
-        // current_inst.regwrite = 1;
-        // current_inst.memtoreg = 0;
-
-        break;
-    case ADDI:
-    case SUBI:
-    case MULI:
-    case ORI:
-    case ANDI:
-    case XORI:
-    case LDW:
-    case STW:
-    case BZ:
-    case BEQ:
-    case JR:
-    case HALT:
-        current_inst.type = 'i';
-        current_inst.imm = (current_inst.binary) & 0x0000FFFF;
-        current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
-        current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
-        // printf(" in i type, current imm %d\n", current_inst.imm);
-        // printf("current rt %d\n", current_inst.rt);
-        // printf("current rs %d\n", current_inst.rs);
-
-        //check sign bit and sign extend
-        signBit = (current_inst.imm >> 15) & 0x00000001;
-        if (signBit == 1)
+        switch (current_inst.opcode)
         {
-            current_inst.imm = current_inst.imm | 0xFFFF0000;
-            //printf("sign extended imm negative:%x\n",current_inst.imm);
-        }
-        else
-        {
-            current_inst.imm = current_inst.imm & 0x0000FFFF;
-            //printf("sign extended imm positive:%x\n",current_inst.imm);
-        }
-        //lw control, remove if not using control bits
-        if (current_inst.opcode == (LDW))
-        {
-            // current_inst.regdst = 0;
-            // current_inst.aluo1 = 0;
-            // current_inst.aluo2 = 0;
-            // current_inst.aluscr = 1;
+        case ADD:
+            current_inst.type = 'r';
+            current_inst.rd = (current_inst.binary >> 11) & 0x0000001F;
+            current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
+            current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
+            printf(" in r type, current rd %x\n", current_inst.rd);
+
+            current_inst.valA = registers[current_inst.rs];
+            current_inst.valB = registers[current_inst.rt];
+
             current_inst.branch = 0;
-            // current_inst.memread = 1;
+
+        case SUB:
+        case MUL:
+        case OR:
+        case AND:
+        case XOR:
+            current_inst.type = 'r';
+            current_inst.rd = (current_inst.binary >> 11) & 0x0000001F;
+            current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
+            current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
+            printf(" in r type, current rd %x\n", current_inst.rd);
+            // printf("current rt %d\n", current_inst.rt);
+            // printf("current rs %d\n", current_inst.rs);
+
+            current_inst.valA = registers[current_inst.rs];
+            current_inst.valB = registers[current_inst.rt];
+
+            //r command control bits, remove if not using
+            // current_inst.regdst = 1;
+            // current_inst.aluo1 = 1;
+            // current_inst.aluo2 = 0;
+            // current_inst.aluscr = 0;
+            current_inst.branch = 0;
+            // current_inst.memread = 0;
             // current_inst.memwrite = 0;
             // current_inst.regwrite = 1;
-            // current_inst.memtoreg = 1;
-        }
-        //sw control, remove if not using control bits
-        if (current_inst.opcode == STW)
-        {
-            // current_inst.regdst = 0;
-            // current_inst.aluo1 = 0;
-            // current_inst.aluo2 = 0;
-            // current_inst.aluscr = 1;
-            current_inst.branch = 0;
-            // current_inst.memread = 0;
-            // current_inst.memwrite = 1;
-            // current_inst.regwrite = 0;
             // current_inst.memtoreg = 0;
-        }
-        //beq imm are addresses and need to be shiffted left
-        if (current_inst.opcode == (BZ || BEQ || JR))
-        {
-            //shift left 2
-            current_inst.imm = current_inst.imm << 2;
 
-            //beq control bits, remove if not using
-            // current_inst.regdst = 0;
-            // current_inst.aluo1 = 0;
-            // current_inst.aluo2 = 1;
-            // current_inst.aluscr = 0;
-            current_inst.branch = 1;
-            // current_inst.memread = 0;
-            // current_inst.memwrite = 0;
-            // current_inst.regwrite = 0;
-            // current_inst.memtoreg = 0;
+            break;
+        case ADDI:
+        case SUBI:
+        case MULI:
+        case ORI:
+        case ANDI:
+        case XORI:
+        case LDW:
+        case STW:
+        case BZ:
+        case BEQ:
+        case JR:
+        case HALT:
+            current_inst.type = 'i';
+            current_inst.imm = (current_inst.binary) & 0x0000FFFF;
+            current_inst.rt = (current_inst.binary >> 16) & 0x0000001F;
+            current_inst.rs = (current_inst.binary >> 21) & 0x0000001F;
+            // printf(" in i type, current imm %d\n", current_inst.imm);
+            // printf("current rt %d\n", current_inst.rt);
+            // printf("current rs %d\n", current_inst.rs);
+
+            //check sign bit and sign extend
+            signBit = (current_inst.imm >> 15) & 0x00000001;
+            if (signBit == 1)
+            {
+                current_inst.imm = current_inst.imm | 0xFFFF0000;
+                //printf("sign extended imm negative:%x\n",current_inst.imm);
+            }
+            else
+            {
+                current_inst.imm = current_inst.imm & 0x0000FFFF;
+                //printf("sign extended imm positive:%x\n",current_inst.imm);
+            }
+            //lw control, remove if not using control bits
+            if (current_inst.opcode == (LDW))
+            {
+                // current_inst.regdst = 0;
+                // current_inst.aluo1 = 0;
+                // current_inst.aluo2 = 0;
+                // current_inst.aluscr = 1;
+                current_inst.branch = 0;
+                // current_inst.memread = 1;
+                // current_inst.memwrite = 0;
+                // current_inst.regwrite = 1;
+                // current_inst.memtoreg = 1;
+            }
+            //sw control, remove if not using control bits
+            if (current_inst.opcode == STW)
+            {
+                // current_inst.regdst = 0;
+                // current_inst.aluo1 = 0;
+                // current_inst.aluo2 = 0;
+                // current_inst.aluscr = 1;
+                current_inst.branch = 0;
+                // current_inst.memread = 0;
+                // current_inst.memwrite = 1;
+                // current_inst.regwrite = 0;
+                // current_inst.memtoreg = 0;
+            }
+            //beq imm are addresses and need to be shiffted left
+            if (current_inst.opcode == (BZ || BEQ || JR))
+            {
+                //shift left 2
+                current_inst.imm = current_inst.imm << 2;
+
+                //beq control bits, remove if not using
+                // current_inst.regdst = 0;
+                // current_inst.aluo1 = 0;
+                // current_inst.aluo2 = 1;
+                // current_inst.aluscr = 0;
+                current_inst.branch = 1;
+                // current_inst.memread = 0;
+                // current_inst.memwrite = 0;
+                // current_inst.regwrite = 0;
+                // current_inst.memtoreg = 0;
+            }
+            break;
         }
-        break;
+
+        instructions[ID] = current_inst;
+
+
+
+        //RAW HAZARD Detection //
+    // Check to see if the either source register in ID matches the destionation registers in EX or MEM
+    // Also check to make sure the destionation registers aren't just R0
+    // If true,  trigger the raw flag indicating the hazard
+    printf("source: %d & previous EX destination: %d & previous MEM destination: %d\n", instructions[ID].rs, instructions[EX].rd, instructions[MEM].rd);
+    if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)) {
+        // enable forwarding - RS in ID conflicts with RD in EX stage
+        // If not a LDW command then enable forwarding for RS
+        *hazard_flag = true;
+
+        //printf("source: %d & previous destination: %d\n", instructions[ID].rs, instructions[EX].rd);
+        printf("hazard_flag set---------------\n");
+        
+        if(mips_status->mode == 2){
+            if (instructions[EX].opcode == LDW){  //if it is a LDW command, then wait a cycle
+                *hazard_flag = true;
+            } else {
+                *hazard_flag = false;
+            }
+        }
+    }
+    if ((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
+        //enable forwarding - RS in ID stage conflicts with RD in MEM stage
+        //enable fowarding for RS from the MEM stage
+        *hazard_flag = true;
+        if(mips_status->mode == 2){
+            *hazard_flag = false;
+        }
     }
 
-    instructions[EX] = current_inst;
+    printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
+
+    if(current_inst.nop == true || *hazard_flag == true)
+    {
+        //do nothing
+        //current_inst.nop = true;
+        printf("nop in ID---------------\n");
+    }
+    else{
+        current_inst.nop = false;
+        *hazard_flag = false;
+        instructions[EX] = instructions[ID];
+    }
+
     return;
 }

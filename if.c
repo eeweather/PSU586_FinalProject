@@ -39,13 +39,15 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, stru
 
     current_instruction.binary = memory[status_struct->pc>>2]; //gather data from memory at chosen pc
 
-
     increment_pc(status_struct); //increment pc assuming no branch for next instruction
-
 
     //printf("after incrementing pc is %d\n", status_struct->pc); //for debug checking while codeing
 
-    instructions[ID]=current_instruction;
+    instructions[IF].binary = current_instruction.binary;
+    instructions[ID] = instructions[IF];
+
+    //printf("in IF, printinf instructions[ID] %x\n", instructions[ID].binary);
+    //printf("in IF, printinf instructions[IF] %x\n", instructions[IF].binary);
 
     return;
 }

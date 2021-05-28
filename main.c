@@ -49,6 +49,8 @@ int main(int argc, char *argv[])
 	bool memlock = true;
 	bool wblock = true;
 
+	hazard_flag = false;
+
 	memset(registers, 0, 32);//set registers to 0 to begin
 	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
 	int i = 12;
@@ -83,7 +85,7 @@ int main(int argc, char *argv[])
 		if (!idlock)
 		{
 			printf("in ID\n");
-			id_stage(instructions, &mips_status_struct, registers, memory);
+			id_stage(instructions, &mips_status_struct, registers, memory, &hazard_flag);
 			printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			exlock = false;
 		}

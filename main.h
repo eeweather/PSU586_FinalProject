@@ -90,6 +90,9 @@ typedef struct mips_status
     bool     halt;
 } mips_status_t;
 
+//Hazard prototypes
+bool hazard_flag;
+
 // function prototypes
 bool getDebug(int index, char* commands[]);
 char* getInputFile(int index, char* commands[]);
@@ -102,7 +105,7 @@ void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
 
 //function prototypes for pipeline stages
 void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal);
-void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[]);
+void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], bool* hazard_flag);
 void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, int32_t registers[]);
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[]);
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[]);

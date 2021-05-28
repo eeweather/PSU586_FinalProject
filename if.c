@@ -84,7 +84,7 @@ uint32_t mux_pc(struct mips_status* status_struct, int32_t branch_signal){
 //to increment the pc assuming no branch will be taken; not accessible outside of if.c
 void increment_pc(struct mips_status* status_struct){
 
-    uint32_t temp;
+    //uint32_t temp;
 
 	status_struct->npc = status_struct->pc + 4;
 

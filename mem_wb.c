@@ -25,7 +25,10 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		mips_status->pc = mips_status->npc;
 	}
 
-
+	if (instructions[MEM].opcode == HALT)
+	{
+		mips_status->halt = true;
+	}
 
 	return;
 }

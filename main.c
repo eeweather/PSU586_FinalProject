@@ -28,13 +28,14 @@ int main(int argc, char *argv[])
 	mips_status_struct.npc = 0;
 	mips_status_struct.pc = 0;		  //initialize the PC so that we can
 	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
-	mips_status_struct.jump_flag = FALSE;
+	mips_status_struct.jump_flag = false;
     mips_status_struct.alu_temp = 0;
     mips_status_struct.count_total = 0; //initialize counts to zero
     mips_status_struct.count_arith = 0;
     mips_status_struct.count_logic = 0;
     mips_status_struct.count_memory_access = 0;
     mips_status_struct.count_control_flow = 0;
+	mips_status_struct.halt = false;
 
 	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
 
@@ -91,8 +92,7 @@ int main(int argc, char *argv[])
 
 	int i = arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
 
-
-	while (i > 0 /*mips_status_struct.halt!=TRUE*/)
+	while (mips_status_struct.halt == false)
 	{
 		if (!wblock)
 		{
@@ -137,7 +137,6 @@ int main(int argc, char *argv[])
 		//printf("after the inst_fetch function, value of register 1: %x\n", registers[1]); //while coding checking
 		//printf("after the inst_fetch function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 		printf("i is: %d\n", i);
-		i--;
 	}
     
     arithCount = mips_status_struct.count_arith; // number of each type of instruction executed

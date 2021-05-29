@@ -18,6 +18,8 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
     else{
         inst_t current_int = instructions[EX];
 
+        printf("current Opcode: %x-------------------------------\n",current_int.opcode);
+        
         switch (current_int.opcode)
         {
         //ADD Rd Rs Rt (Add the contents of registers Rs and Rt, transfer the result
@@ -29,6 +31,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
             // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status_t->count_arith++;
             mips_status_t->count_total++;
+            printf("ADD arith count is %d\n", mips_status_t->count_arith);
             break;
 
         //ADDI Rt Rs Imm (Add the contents of register Rs to the immediate value “Imm”,
@@ -40,6 +43,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
             // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status_t->count_arith++;
             mips_status_t->count_total++;
+            printf("ADDI arith count is %d\n", mips_status_t->count_arith);
             break;
 
         //SUB Rd Rs Rt (Subtract the contents of register Rt from Rs, transfer the result to
@@ -51,6 +55,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
             // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status_t->count_arith++;
             mips_status_t->count_total++;
+            printf("SUB arith count is %d\n", mips_status_t->count_arith);
             break;
 
         //SUBI Rt Rs Imm (Subtract the immediate value “Imm” from the contents of register Rs,
@@ -168,6 +173,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
             // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status_t->count_total++;
             mips_status_t->count_memory_access++;
+            printf("MemAccess count is %d\n", mips_status_t->count_memory_access);
             break;
 
         //STW Rt Rs Imm (Add the contents of Rs and the immediate value “Imm” to generate
@@ -215,6 +221,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
                 mips_status_t->temp_pc = (mips_status_t->pc << 2);
                 mips_status_t->count_control_flow++;
                 mips_status_t->count_total++;
+                printf("Control flow count is %d\n", mips_status_t->count_control_flow);
             }
             else
             {
@@ -223,6 +230,7 @@ void execution_stage(inst_t instructions[], struct mips_status *mips_status_t,in
                 // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
                 mips_status_t->count_control_flow++;
                 mips_status_t->count_total++;
+                printf("Control flow count is %d\n", mips_status_t->count_control_flow);
             }
             break;
 

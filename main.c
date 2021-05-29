@@ -29,6 +29,12 @@ int main(int argc, char *argv[])
 	mips_status_struct.pc = 0;		  //initialize the PC so that we can
 	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
 	mips_status_struct.jump_flag = FALSE;
+    mips_status_struct.alu_temp = 0;
+    mips_status_struct.count_total = 0; //initialize counts to zero
+    mips_status_struct.count_arith = 0;
+    mips_status_struct.count_logic = 0;
+    mips_status_struct.count_memory_access = 0;
+    mips_status_struct.count_control_flow = 0;
 
 	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
 
@@ -133,7 +139,12 @@ int main(int argc, char *argv[])
 		printf("i is: %d\n", i);
 		i--;
 	}
-
+    
+    arithCount = mips_status_struct.count_arith; // number of each type of instruction executed
+	logiCount = mips_status_struct.count_logic;
+	memCount = mips_status_struct.count_memory_access;
+	ctlCount = mips_status_struct.count_control_flow;
+    
 	printInstructionsByType(arithCount, logiCount, memCount, ctlCount);
 	printRegPcStates(registers, regChange, mips_status_struct.pc);
 	printMemStates(memory, memChange);

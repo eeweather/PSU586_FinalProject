@@ -1,5 +1,4 @@
 #include "main.h"
-#include "mem_wb.h"
 
 // MEM stage of pipeline
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])

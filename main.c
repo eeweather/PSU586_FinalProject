@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "main.h"
-#include "mem_wb.h"
+#include "formatting.h"
 
 int main(int argc, char *argv[])
 {
@@ -39,6 +39,28 @@ int main(int argc, char *argv[])
 	inst_t instructions[5]; //initializing instruction array
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
+
+	int arithCount = 0; // number of each type of instruction executed
+	int logiCount = 0;
+	int memCount = 0;
+	int ctlCount = 0;
+
+	int nfHazards = 0;	// number of hazards, total stall, total cycles in non-forwarding case (zero for forwarding)
+	int nfTotalStall = 0;	 
+ 	int nfTotalCycles = 0;	
+
+	int fHazards = 0;	// number of hazards, total stall, total cycles in forwarding case (zero for non-forwarding)
+	int fTotalStall = 0;	 
+ 	int fTotalCycles = 0;	
+
+	for (int index = 0; index < 32; index++)	// initialize regChange array to false flags 
+	{
+		regChange[index] = false;
+	}
+	for (int index = 0; index < 1024; index++)
+	{
+		memChange[index] = false;
+	}
 
 	//registers[1] = 0x12345678; //while coding checking
 
@@ -112,11 +134,11 @@ int main(int argc, char *argv[])
 		i--;
 	}
 
-//	printInstructionsByType(arith, logi, mem, ctl);
-//	printRegPcStates(reg, regChange, pc);
-//	printMemStates(mem, memChange);
-//	printNoForwardingHazards(nfHazards, totalStall, totalCycles);
-//	printForwardingHazards(fHazards, totalStall, totalCycles);
+	printInstructionsByType(arithCount, logiCount, memCount, ctlCount);
+	printRegPcStates(registers, regChange, mips_status_struct.pc);
+	printMemStates(memory, memChange);
+	printNoForwardingHazards(nfHazards, nfTotalStall, nfTotalCycles);
+	printForwardingHazards(fHazards, fTotalStall, fTotalCycles);
 //	printSpeedupAchieved(nfCycles, fCycles);
 
 	closeFile(addressFile); // close the input file

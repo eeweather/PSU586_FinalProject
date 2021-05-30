@@ -2,7 +2,7 @@
 # MIPS Instruction Generator for ECE585/586
 # Portland State University - Spring 2021
 #
-# 2021.5.28 - Modified by DC to add Mips decode functionality
+# 2021.5.28 - Modified by David Craft to add Mips decode functionality
 # provide the op-code type and register decimal number.
 
 # Import tkinter for GUI development
@@ -190,7 +190,7 @@ def generate_r_instruction():
 def generate_i_instruction():
     rs = sel_rs.get()
     rt = sel_rt.get()
-    immediate = sel_mips.get()
+    immediate = sel_immediate.get()
     opcode_s = convert_opcode(sel_opcode.get())
     rs_s = "{0:05b}".format(int(rs))
     rt_s = "{0:05b}".format(int(rt))

@@ -5,6 +5,17 @@
 //	ECE 586 Spring 2021
 //	Final Project
 //
+//  Description:  Program models a simplified version of the 
+//  MIPS ISA called MIPS-lite and the in-order 5-stage pipeline.
+//
+//  To run using a specified mode use the "-m" command.
+//  ./main -m <mode number>
+//  
+//  modes:
+//          "0" - Functional simulation 
+//          "1" - Simulation with timing 
+//          "2" - Simulation with timing and data forwarding
+//
 ///////////////////////////////////////////////////////////
 
 #include "main.h"

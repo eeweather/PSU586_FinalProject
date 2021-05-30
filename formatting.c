@@ -90,6 +90,7 @@ void printNoForwardingHazards(int nfHazards, int totalStall, int totalCycles)
 	printf("\nNo forwarding case");
 	printf("\n");
 	printf("\nTotal hazards: %d", nfHazards);
+	printf("\nTotal stalls: %d", totalStall);
 	printf("\nAverage stall per hazard: %f", avgStall);
 	printf("\n");
 	printf("\nTotal execution time: %d", totalCycles);
@@ -110,6 +111,7 @@ void printForwardingHazards(int fHazards, int totalStall, int totalCycles)
 	printf("\nForwarding case");
 	printf("\n");
 	printf("\nTotal hazards: %d", fHazards);
+	printf("\nTotal stalls: %d", totalStall);
 	printf("\nAverage stall per hazard: %f", avgStall);
 	printf("\n");
 	printf("\nTotal execution time: %d", totalCycles);

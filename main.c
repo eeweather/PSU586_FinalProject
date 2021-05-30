@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     mips_status_struct.count_logic = 0;
     mips_status_struct.count_memory_access = 0;
     mips_status_struct.count_control_flow = 0;
+    mips_status_struct.count_stall = 0;
 	mips_status_struct.halt = false;
 
 	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
 	logiCount = mips_status_struct.count_logic;
 	memCount = mips_status_struct.count_memory_access;
 	ctlCount = mips_status_struct.count_control_flow;
+    nfTotalStall = mips_status_struct.count_stall;
     
 	printInstructionsByType(arithCount, logiCount, memCount, ctlCount);
 	printRegPcStates(registers, regChange, mips_status_struct.pc);

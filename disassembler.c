@@ -13,7 +13,7 @@
 //   output filenames, use the command line syntax
 //   as follows:
 //
-//   ./assembler -i <input_filename> -o <output_filename>
+//   ./disassembler -i <input_filename> -o <output_filename>
 //
 /////////////////////////////////////////////////////////
 

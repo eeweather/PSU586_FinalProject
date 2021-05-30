@@ -34,6 +34,7 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, stru
 
     if(*hazard_flag == true){
         printf("hazard was set => not pulling mem into IF*************\n");
+        status_struct->count_stall++;
     }
     else{
     current_instruction.binary = memory[status_struct->pc>>2]; //gather data from memory at chosen pc

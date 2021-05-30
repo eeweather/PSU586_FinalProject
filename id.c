@@ -1,6 +1,6 @@
 #include "main.h"
 
-void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], bool* hazard_flag)
+void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], bool* hazard_flag, forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag)
 {
 
     //printf("hazard flag value at the beginning of ID: ");
@@ -150,6 +150,8 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 *hazard_flag = true;
             } else {
                 *hazard_flag = false;
+                *forward_stage_flag = EX_MEM;
+                *forward_reg_flag = RS;
             }
         }
     }
@@ -162,6 +164,8 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
         if(mips_status->mode == 2){
             *hazard_flag = false;
+            *forward_stage_flag = MEM_WB;
+            *forward_reg_flag = RS;
         }
     }
     else if ((instructions[ID].rt == instructions[EX].rd) && (instructions[EX].rd != 0)) {
@@ -176,6 +180,8 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 *hazard_flag = true;
             } else {
                 *hazard_flag = false;
+                *forward_stage_flag = EX_MEM;
+                *forward_reg_flag = RT;
             }
         }
     }
@@ -188,6 +194,8 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
         if(mips_status->mode == 2){
             *hazard_flag = false;
+            *forward_stage_flag = MEM_WB;
+            *forward_reg_flag = RT;
         }
     }
 

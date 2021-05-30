@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
 	mips_status_struct.jump_flag = false;
     mips_status_struct.alu_temp = 0;
+	mips_status_struct.prior_alu_temp = 0;
     mips_status_struct.count_total = 0; //initialize counts to zero
     mips_status_struct.count_arith = 0;
     mips_status_struct.count_logic = 0;
@@ -86,6 +87,10 @@ int main(int argc, char *argv[])
 	instructions[MEM].nop = true;
 	instructions[WB].nop = true;
 
+	//initialize forwarding flag info (register and pipeline stage)
+	forward_stage_t forward_stage_flag = NO_FWDH;
+	forward_reg_t forward_reg_flag;
+
 	for(int j=0; j<32; j++){
 		registers[j] = 0; //set registers to 0 to begin
 	}
@@ -112,7 +117,7 @@ int main(int argc, char *argv[])
 		if (!exlock)
 		{
 			printf("in EX\n");
-			execution_stage(instructions, &mips_status_struct, registers);
+			execution_stage(instructions, &mips_status_struct, registers, &forward_stage_flag, &forward_reg_flag);
 			printf("after the ex function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			memlock = false;
 		}
@@ -121,7 +126,7 @@ int main(int argc, char *argv[])
 		if (!idlock)
 		{
 			printf("in ID\n");
-			id_stage(instructions, &mips_status_struct, registers, memory, &hazard_flag);
+			id_stage(instructions, &mips_status_struct, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 			printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			exlock = false;
 		}

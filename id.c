@@ -109,7 +109,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 // current_inst.memtoreg = 0;
             }
             //beq imm are addresses and need to be shifted left
-            if (current_inst.opcode == BZ ||current_inst.opcode == BEQ || current_inst.opcode ==JR))
+            if (current_inst.opcode == BZ ||current_inst.opcode == BEQ || current_inst.opcode ==JR)
             {
                 //shift left 2
                 current_inst.imm = current_inst.imm << 2;

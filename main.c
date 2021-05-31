@@ -162,12 +162,12 @@ int main(int argc, char *argv[])
 	ctlCount = mips_status_struct.count_control_flow;
     nfTotalStall = mips_status_struct.count_stall;
     
-	printInstructionsByType(arithCount, logiCount, memCount, ctlCount);
-	printRegPcStates(registers, regChange, mips_status_struct.pc);
-	printMemStates(memory, memChange);
-	printNoForwardingHazards(nfHazards, nfTotalStall, nfTotalCycles);
-	printForwardingHazards(fHazards, fTotalStall, fTotalCycles);
-//	printSpeedupAchieved(nfCycles, fCycles);
+	printInstructionsByType(arithCount, logiCount, memCount, ctlCount, outputFile);
+	printRegPcStates(registers, regChange, mips_status_struct.pc, outputFile);
+	printMemStates(memory, memChange, outputFile);
+	printNoForwardingHazards(nfHazards, nfTotalStall, nfTotalCycles, outputFile);
+	printForwardingHazards(fHazards, fTotalStall, fTotalCycles, outputFile);
+//	printSpeedupAchieved(nfCycles, fCycles, outputFile);
 
 	closeFile(addressFile); // close the input file
 	closeFile(outputFile);	// close the output file

@@ -43,14 +43,6 @@ int main(int argc, char *argv[])
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
 
-	int nfHazards = 0;	// number of hazards, total stall, total cycles in non-forwarding case (zero for forwarding)
-	int nfTotalStall = 0;	 
- 	int nfTotalCycles = 0;	
-
-	int fHazards = 0;	// number of hazards, total stall, total cycles in forwarding case (zero for non-forwarding)
-	int fTotalStall = 0;	 
- 	int fTotalCycles = 0;	
-
 	for (int index = 0; index < 32; index++)	// initialize regChange array to false flags 
 	{
 		regChange[index] = false;
@@ -85,9 +77,7 @@ int main(int argc, char *argv[])
 	printInstructionsByType(status.count_arith, status.count_logic, status.count_memory_access, status.count_control_flow, outputFile);
 	printRegPcStates(registers, regChange, status.pc, outputFile);
 	printMemStates(memory, memChange, outputFile);
-	printNoForwardingHazards(nfHazards, nfTotalStall, nfTotalCycles, outputFile);
-	printForwardingHazards(fHazards, fTotalStall, fTotalCycles, outputFile);
-//	printSpeedupAchieved(nfCycles, fCycles, outputFile);
+	printHazards(status.count_hazards, status.count_stall, status.cycles, outputFile);
 
 	closeFile(addressFile); // close the input file
 	closeFile(outputFile);	// close the output file

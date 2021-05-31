@@ -87,6 +87,8 @@ typedef struct mips_status
     uint16_t count_memory_access;
     uint16_t count_control_flow;
     uint16_t count_stall;
+    uint16_t count_hazards;
+    uint16_t cycles;
     bool     zero_flag;
     bool     jump_flag;
     bool     halt;

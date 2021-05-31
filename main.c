@@ -43,14 +43,8 @@ int main(int argc, char *argv[])
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
 
-	for (int index = 0; index < 32; index++)	// initialize regChange array to false flags 
-	{
-		regChange[index] = false;
-	}
-	for (int index = 0; index < 1024; index++)
-	{
-		memChange[index] = false;
-	}
+	initialize_registers(registers);
+	initialize_changeArrays(memChange, regChange);
 
 	hazard_flag = false; //initialize hazard flag
 
@@ -58,9 +52,6 @@ int main(int argc, char *argv[])
 	forward_stage_t forward_stage_flag = NO_FWDH;
 	forward_reg_t forward_reg_flag;
 
-	for(int j=0; j<32; j++){
-		registers[j] = 0; //set registers to 0 to begin
-	}
 
 	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
 
@@ -298,5 +289,26 @@ void initialize_instructions(inst_t* instructions)
 		instructions[EX].nop = true;
 		instructions[MEM].nop = true;
 		instructions[WB].nop = true;
+	}
+}
+
+void initialize_changeArrays(bool* memChange, bool* regChange)
+{
+	for (int index = 0; index < 1024; index++)
+	{
+		memChange[index] = false;
+	}
+
+	for (int index = 0; index < 32; index++)	// initialize regChange array to false flags 
+	{
+		regChange[index] = false;
+	}
+}
+
+void initialize_registers(int32_t* registers)
+{
+	for (int index = 0; index < 32; index++)
+	{
+		registers[index] = 0; //set registers to 0 to begin
 	}
 }

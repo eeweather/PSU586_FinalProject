@@ -128,5 +128,6 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 void initialize_status(mips_status_t* status, int mode, bool debug);
 void initialize_changeArrays(bool* memChange, bool* regChange);
 void initialize_registers(int32_t* registers);
+void initialize_instructions(inst_t* instructions);
 
 #endif

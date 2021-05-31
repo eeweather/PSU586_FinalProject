@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 
 	initialize_registers(registers);
 	initialize_changeArrays(memChange, regChange);
+	initialize_instructions(instructions);
 
 	hazard_flag = false; //initialize hazard flag
 
@@ -282,13 +283,27 @@ void initialize_status(mips_status_t* status, int mode, bool debug)
 
 void initialize_instructions(inst_t* instructions)
 {
-	for (int i = 0; i < 5; i++)
+	for (int index = 0; index < 5; index++)
 	{
-		instructions[IF].nop = true; //don't expect a nop into IF (using the hazard flag instead of the nop for the stalls in IF)
-		instructions[ID].nop = true;
-		instructions[EX].nop = true;
-		instructions[MEM].nop = true;
-		instructions[WB].nop = true;
+    		instructions[index].binary 		= 0; //maybe dont need
+   		instructions[index].type 		= 'r';
+   		instructions[index].opcode 		= ADD;
+   	 	instructions[index].rs 			= 0;  //removed separate rs and rt for instruction types
+   	 	instructions[index].rt 			= 0;
+   	 	instructions[index].rd 			= 0;
+   	 	instructions[index].imm 		= 0;
+   	 	instructions[index].valA 		= 0;
+   	 	instructions[index].valB 		= 0;
+		if (index > 0)
+		{	
+  	 	 	instructions[index].nop 	= true;
+		}
+		else
+		{
+			instructions[index].nop		= false;
+		}
+ 	 	instructions[index].branch 		= false;
+   	 	instructions[index].halt 		= false;
 	}
 }
 

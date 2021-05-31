@@ -114,52 +114,19 @@ void printMemStates(int mem[], bool memChange[], FILE* outputFile)
 }
 
 // Print number of data hazards, average stall per stall condition,
-// 	and total execution time for non forwarding case
+// and total execution time 
 //
-// nfHazards: number of data hazards for non-forwarding case
-// totalStall: total stall from non-forwarding data hazards
-// totalCycles: total execution time in clock cycles for non-forwarding case 
-void printNoForwardingHazards(int nfHazards, int totalStall, int totalCycles, FILE* outputFile)
+// hazards: number of data hazards 
+// totalStall: total stall from data hazards
+// totalCycles: total execution time in clock cycles
+void printHazards(int hazards, int totalStall, int totalCycles, FILE* outputFile)
 {
-	float avgStall = ((float)totalStall) / ((float)nfHazards);
-
-	printf("\n");
-	printf("\nNo forwarding case");
-	printf("\n");
-	printf("\nTotal hazards: %d", nfHazards);
-	printf("\nTotal stalls: %d", totalStall);
-	printf("\nAverage stall per hazard: %f", avgStall);
-	printf("\n");
-	printf("\nTotal execution time: %d", totalCycles);
-	printf("\n");
-
-	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nNo forwarding case");
-	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nTotal hazards: %d", nfHazards);
-	fprintf(outputFile, "\nTotal stalls: %d", totalStall);
-	fprintf(outputFile, "\nAverage stall per hazard: %f", avgStall);
-	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nTotal execution time: %d", totalCycles);
-	fprintf(outputFile, "\n");
-
-	return;
-}
-
-// Print number of data hazards, average stall per stall condition,
-// and total execution time for forwarding case
-//
-// fHazards: number of data hazards for forwarding case
-// totalStall: total stall from forwarding data hazards
-// totalCycles: total execution time in clock cycles for forwarding case 
-void printForwardingHazards(int fHazards, int totalStall, int totalCycles, FILE* outputFile)
-{
-	float avgStall = ((float)totalStall) / ((float)fHazards);
+	float avgStall = ((float)totalStall) / ((float)hazards);
 
 	printf("\n");
 	printf("\nForwarding case");
 	printf("\n");
-	printf("\nTotal hazards: %d", fHazards);
+	printf("\nTotal hazards: %d", hazards);
 	printf("\nTotal stalls: %d", totalStall);
 	printf("\nAverage stall per hazard: %f", avgStall);
 	printf("\n");
@@ -169,7 +136,7 @@ void printForwardingHazards(int fHazards, int totalStall, int totalCycles, FILE*
 	fprintf(outputFile, "\n");
 	fprintf(outputFile, "\nForwarding case");
 	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nTotal hazards: %d", fHazards);
+	fprintf(outputFile, "\nTotal hazards: %d", hazards);
 	fprintf(outputFile, "\nTotal stalls: %d", totalStall);
 	fprintf(outputFile, "\nAverage stall per hazard: %f", avgStall);
 	fprintf(outputFile, "\n");

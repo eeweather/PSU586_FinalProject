@@ -1,7 +1,7 @@
 #include "main.h"
 
 // MEM stage of pipeline
-bool memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
+void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
 {
 	instructions[MEM] = instructions[EX];
 	opcode_t opcode = instructions[MEM].opcode;

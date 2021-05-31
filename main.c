@@ -86,10 +86,10 @@ int main(int argc, char *argv[])
 
 	//all stages start locked except IF
 	bool iflock = false;
-	bool idlock = true;
-	bool exlock = true;
-	bool memlock = true;
-	bool wblock = true;
+	bool idlock = false;
+	bool exlock = false;
+	bool memlock = false;
+	bool wblock = false;
 
 	hazard_flag = false; //initialize hazard flag
 
@@ -113,14 +113,14 @@ int main(int argc, char *argv[])
 	{
 		if (!wblock)
 		{
-			//printf("in WB\n");
+			printf("in WB\n");
 			writeback_stage(instructions, &mips_status_struct, registers, regChange);
 			//printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 		}
 
 		if (!memlock)
 		{
-			//printf("in MEM\n");
+			printf("in MEM\n");
 			memory_stage(instructions, &mips_status_struct, registers, memory, memChange);
 			//printf("after the mem function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			wblock = false;
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 
 		if (!exlock)
 		{
-			//printf("in EX\n");
+			printf("in EX\n");
 			execution_stage(instructions, &mips_status_struct, registers, &forward_stage_flag, &forward_reg_flag);
 			//printf("after the ex function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			memlock = false;
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 
 		if (!idlock)
 		{
-			//printf("in ID\n");
+			printf("in ID\n");
 			id_stage(instructions, &mips_status_struct, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 			//printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			exlock = false;
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 
 		if (!iflock)
 		{
-			//printf("in IF\n");
+			printf("in IF\n");
 			inst_fetch(instructions, registers, memory, &mips_status_struct, branch_control_signal, &hazard_flag); //IF stage
 			//printf("after the if function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			idlock = false;
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
 		//printf("after the inst_fetch function, value of register 1: %x\n", registers[1]); //while coding checking
 		//printf("after the inst_fetch function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-		printf("i is: %d\n", i);
+		//printf("i is: %d\n", i);
 	}
     
     arithCount = mips_status_struct.count_arith; // number of each type of instruction executed

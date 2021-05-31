@@ -137,72 +137,109 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
     // Also check to make sure the destionation registers aren't just R0
     // If true,  trigger the raw flag indicating the hazard
     *hazard_flag = false;
+    printf("Instruction type: %d\n",instructions[ID].type);
     //printf("source: %d & previous EX destination: %d & previous MEM destination: %d\n", instructions[ID].rs, instructions[EX].rd, instructions[MEM].rd);
-    if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)) {
-        // enable forwarding - RS in ID conflicts with RD in EX stage
-        // If not a LDW command then enable forwarding for RS
-        *hazard_flag = true;
+    if(instructions[ID].type == 114){  //r-type is 114
+        if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)) {
+            // enable forwarding - RS in ID conflicts with RD in EX stage
+            // If not a LDW command then enable forwarding for RS
+            *hazard_flag = true;
 
-        printf("hazard_flag set---------------EX Opcode: %d\n",instructions[ID].opcode);
-        
-        if(mips_status->mode == FORWARDING){
-            if (instructions[ID].opcode == LDW){  //if it is a LDW command, then wait a cycle
-                *hazard_flag = true;
-            } else {
+            printf("hazard_flag set---------------EX Opcode: %d\n",instructions[ID].opcode);
+            
+            if(mips_status->mode == FORWARDING){
+                if (instructions[ID].opcode == LDW){  //if it is a LDW command, then wait a cycle
+                    *hazard_flag = true;
+                } else {
+                    *hazard_flag = false;
+                    *forward_stage_flag = EX_MEM;
+                    *forward_reg_flag = RS;
+                    printf("hazard_flag removed---------------FORWARDING from EX_MEM");
+                }
+            }
+        }
+        else if ((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
+            //enable forwarding - RS in ID stage conflicts with RD in MEM stage
+            //enable fowarding for RS from the MEM stage
+            *hazard_flag = true;
+
+            printf("hazard_flag set---------------MEM Opcode: %d\n",instructions[ID].opcode);
+
+            if(mips_status->mode == FORWARDING){
                 *hazard_flag = false;
-                *forward_stage_flag = EX_MEM;
+                *forward_stage_flag = MEM_WB;
                 *forward_reg_flag = RS;
-                printf("hazard_flag removed---------------FORWARDING from EX_MEM");
+                printf("hazard_flag removed---------------FORWARDING from MEM_WB");
             }
         }
-    }
-    else if ((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
-        //enable forwarding - RS in ID stage conflicts with RD in MEM stage
-        //enable fowarding for RS from the MEM stage
-        *hazard_flag = true;
+        else if ((instructions[ID].rt == instructions[EX].rd) && (instructions[EX].rd != 0)) {
+            // enable forwarding - RT in ID conflicts with RD in EX stage
+            // If not a LDW command then enable forwarding for RS
+            *hazard_flag = true;
 
-        printf("hazard_flag set---------------MEM Opcode: %d\n",instructions[ID].opcode);
-
-        if(mips_status->mode == FORWARDING){
-            *hazard_flag = false;
-            *forward_stage_flag = MEM_WB;
-            *forward_reg_flag = RS;
-            printf("hazard_flag removed---------------FORWARDING from MEM_WB");
+            printf("hazard_flag set---------------EX Opcode: %d\n",instructions[ID].opcode);
+            
+            if(mips_status->mode == FORWARDING){
+                if (instructions[ID].opcode == LDW){  //if it is a LDW command, then wait a cycle
+                    *hazard_flag = true;
+                } else {
+                    *hazard_flag = false;
+                    *forward_stage_flag = EX_MEM;
+                    *forward_reg_flag = RT;
+                    printf("hazard_flag removed---------------FORWARDING from EX_MEM");
+                }
+            }
         }
-    }
-    else if ((instructions[ID].rt == instructions[EX].rd) && (instructions[EX].rd != 0)) {
-        // enable forwarding - RT in ID conflicts with RD in EX stage
-        // If not a LDW command then enable forwarding for RS
-        *hazard_flag = true;
+        else if((instructions[ID].rt == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
+            //enable forwarding - RT in ID stage conflicts with RD in MEM stage
+            //enable fowarding for RT from the MEM stage
+            *hazard_flag = true;
 
-        printf("hazard_flag set---------------EX Opcode: %d\n",instructions[ID].opcode);
-        
-        if(mips_status->mode == FORWARDING){
-            if (instructions[ID].opcode == LDW){  //if it is a LDW command, then wait a cycle
-                *hazard_flag = true;
-            } else {
+            printf("hazard_flag set---------------MEM Opcode: %d\n",instructions[ID].opcode);
+
+            if(mips_status->mode == FORWARDING){
                 *hazard_flag = false;
-                *forward_stage_flag = EX_MEM;
+                *forward_stage_flag = MEM_WB;
                 *forward_reg_flag = RT;
-                printf("hazard_flag removed---------------FORWARDING from EX_MEM");
+                printf("hazard_flag removed---------------FORWARDING from MEM_WB");
             }
         }
     }
-    else if((instructions[ID].rt == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
-        //enable forwarding - RT in ID stage conflicts with RD in MEM stage
-        //enable fowarding for RT from the MEM stage
-        *hazard_flag = true;
+    else{
+        if ((instructions[ID].rs == instructions[EX].rt) && (instructions[EX].rt != 0)) {
+            // enable forwarding - i-type RS in ID conflicts with Rt in EX stage
+            // If not a LDW command then enable forwarding for RS
+            *hazard_flag = true;
 
-        printf("hazard_flag set---------------MEM Opcode: %d\n",instructions[ID].opcode);
-
-        if(mips_status->mode == FORWARDING){
-            *hazard_flag = false;
-            *forward_stage_flag = MEM_WB;
-            *forward_reg_flag = RT;
-            printf("hazard_flag removed---------------FORWARDING from MEM_WB");
+            printf("hazard_flag set---------------EX Opcode: %d\n",instructions[ID].opcode);
+            
+            if(mips_status->mode == FORWARDING){
+                if (instructions[ID].opcode == LDW){  //if it is a LDW command, then wait a cycle
+                    *hazard_flag = true;
+                } else {
+                    *hazard_flag = false;
+                    *forward_stage_flag = EX_MEM;
+                    *forward_reg_flag = RS;
+                    printf("hazard_flag removed---------------FORWARDING from EX_MEM");
+                }
+            }
         }
-    }
+        else if ((instructions[ID].rs == instructions[MEM].rt) && (instructions[MEM].rt != 0)){
+            //enable forwarding - i-type RS in ID stage conflicts with Rt in MEM stage
+            //enable fowarding for RS from the MEM stage
+            *hazard_flag = true;
 
+            printf("hazard_flag set---------------MEM Opcode: %d\n",instructions[ID].opcode);
+
+            if(mips_status->mode == FORWARDING){
+                *hazard_flag = false;
+                *forward_stage_flag = MEM_WB;
+                *forward_reg_flag = RS;
+                printf("hazard_flag removed---------------FORWARDING from MEM_WB");
+            }
+        }
+        
+    }
     //printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
 
     if(instructions[ID].nop == true || *hazard_flag == true)
@@ -219,3 +256,4 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
     return;
 }
+  

@@ -5,12 +5,11 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
     //printf("hazard flag value at the beginning of ID: ");
     //printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
-
+    
     if(*hazard_flag != true){
         inst_t current_inst;
         instructions[ID] = instructions[IF];
         current_inst = instructions[ID];
-
 
     
         current_inst.opcode = (current_inst.binary >> 26) & 0x0000003F;
@@ -126,8 +125,11 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 // current_inst.memtoreg = 0;
             }
             break;
+        case NON:
+            //nothing case
+            break;
         }
-    
+        //printf("ID opcode, %d.\n",current_inst.opcode);
         instructions[ID] = current_inst;
     }
 
@@ -137,7 +139,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
     // Also check to make sure the destionation registers aren't just R0
     // If true,  trigger the raw flag indicating the hazard
     *hazard_flag = false;
-    printf("Instruction type: %d\n",instructions[ID].type);
+    //printf("Instruction type: %d\n",instructions[ID].type);
     //printf("source: %d & previous EX destination: %d & previous MEM destination: %d\n", instructions[ID].rs, instructions[EX].rd, instructions[MEM].rd);
     if(instructions[ID].type == 114){  //r-type is 114
         if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)) {

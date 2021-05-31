@@ -71,6 +71,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         *forward_stage_flag = NO_FWDH; //resolve this back to no forwarding hazard until we get a true hazard error again
 
         //printf("current Opcode: %x-------------------------------\n",current_int.opcode);
+        
         mips_status->prior_alu_temp = mips_status->alu_temp; //copy the alu_temp to have for MEM forwarding (previous instruction info)
         switch (current_int.opcode)
         {
@@ -303,12 +304,17 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             mips_status->count_control_flow++;
             mips_status->count_total++;
             break;
-
+            
+        case (NON):
+            // Not an opcode, initialization as none
+            break;
+            
         // Simulator shouldn't reach the default state
         default:
             printf("Default Case reached in Execute Stage.  Something isn't working.\n");
             break;
         }
+        //printf("current count: %d-------------------------------\n",mips_status->count_total);
         printf("current pc: %d\n",mips_status->pc);
         instructions[EX] = current_int;
     }

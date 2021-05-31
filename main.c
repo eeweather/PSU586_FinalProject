@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
 	{
 		writeback_stage(instructions, &status, registers, regChange);
 		memory_stage(instructions, &status, registers, memory, memChange);
+        if (status.halt == true){
+            break;}
 		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
@@ -287,7 +289,7 @@ void initialize_instructions(inst_t* instructions)
 	{
     		instructions[index].binary 		= 0; //maybe dont need
    		instructions[index].type 		= 'r';
-   		instructions[index].opcode 		= ADD;
+   		instructions[index].opcode 		= NON;
    	 	instructions[index].rs 			= 0;  //removed separate rs and rt for instruction types
    	 	instructions[index].rt 			= 0;
    	 	instructions[index].rd 			= 0;

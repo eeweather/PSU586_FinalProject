@@ -113,41 +113,41 @@ int main(int argc, char *argv[])
 	{
 		if (!wblock)
 		{
-			printf("in WB\n");
+			//printf("in WB\n");
 			writeback_stage(instructions, &mips_status_struct, registers, regChange);
-			printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
+			//printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 		}
 
 		if (!memlock)
 		{
-			printf("in MEM\n");
+			//printf("in MEM\n");
 			memory_stage(instructions, &mips_status_struct, registers, memory, memChange);
-			printf("after the mem function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
+			//printf("after the mem function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			wblock = false;
 		}
 
 		if (!exlock)
 		{
-			printf("in EX\n");
+			//printf("in EX\n");
 			execution_stage(instructions, &mips_status_struct, registers, &forward_stage_flag, &forward_reg_flag);
-			printf("after the ex function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
+			//printf("after the ex function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			memlock = false;
 		}
 		//printf("binary of instruction in ID: %x\n", instructions[ID].binary);
 
 		if (!idlock)
 		{
-			printf("in ID\n");
+			//printf("in ID\n");
 			id_stage(instructions, &mips_status_struct, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
-			printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
+			//printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			exlock = false;
 		}
 
 		if (!iflock)
 		{
-			printf("in IF\n");
+			//printf("in IF\n");
 			inst_fetch(instructions, registers, memory, &mips_status_struct, branch_control_signal, &hazard_flag); //IF stage
-			printf("after the if function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
+			//printf("after the if function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
 			idlock = false;
 		}
 

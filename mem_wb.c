@@ -40,10 +40,9 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	if (instructions[MEM].opcode == HALT)
 	{
 		mips_status->halt = true;
-		return true;
 	}
 
-	return false;
+	return;
 }
 
 // WB stage of pipeline

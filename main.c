@@ -32,38 +32,16 @@ int main(int argc, char *argv[])
 	FILE *addressFile = openInputFile(input);  // check that we can open memory file to read from
 	FILE *outputFile = openOutputFile(output); // check that we can open file to output to
 
-	struct mips_status mips_status_struct; //initializing our MIPS status structure - add more components to this as needed in main.h
-
-	mips_status_struct.mode = mode;
-	mips_status_struct.debug = debug;
-	mips_status_struct.npc = 0;
-	mips_status_struct.pc = 0;		  //initialize the PC so that we can
-	mips_status_struct.pc_branch = 4; //while coding checking, can otherwise initialize to zero
-	mips_status_struct.jump_flag = false;
-    mips_status_struct.alu_temp = 0;
-	mips_status_struct.prior_alu_temp = 0;
-    mips_status_struct.count_total = 0; //initialize counts to zero
-    mips_status_struct.count_arith = 0;
-    mips_status_struct.count_logic = 0;
-    mips_status_struct.count_memory_access = 0;
-    mips_status_struct.count_control_flow = 0;
-    mips_status_struct.count_stall = 0;
-	mips_status_struct.halt = false;
-
-	printf("initial value of pc is %d and initial value of pc_branch is %d\n", mips_status_struct.pc, mips_status_struct.pc_branch);
+	mips_status_t status; //initializing our MIPS status structure - add more components to this as needed in main.h
+	initialize_status(&status, mode, debug);
 
 	int32_t registers[32];	//initialize our registers
-	bool regChange[32];
+	bool 	regChange[32];
 	int32_t memory[1024];	//initialize the memory storage array
-	bool memChange[1024];
-	inst_t instructions[5]; //initializing instruction array
+	bool 	memChange[1024];
+	inst_t	instructions[5]; //initializing instruction array
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
-
-	int arithCount = 0; // number of each type of instruction executed
-	int logiCount = 0;
-	int memCount = 0;
-	int ctlCount = 0;
 
 	int nfHazards = 0;	// number of hazards, total stall, total cycles in non-forwarding case (zero for forwarding)
 	int nfTotalStall = 0;	 
@@ -82,22 +60,7 @@ int main(int argc, char *argv[])
 		memChange[index] = false;
 	}
 
-	//registers[1] = 0x12345678; //while coding checking
-
-	//all stages start locked except IF
-	bool iflock = false;
-	bool idlock = false;
-	bool exlock = false;
-	bool memlock = false;
-	bool wblock = false;
-
 	hazard_flag = false; //initialize hazard flag
-
-	instructions[IF].nop = false; //don't expect a nop into IF (using the hazard flag instead of the nop for the stalls in IF)
-	instructions[ID].nop = true;
-	instructions[EX].nop = true;
-	instructions[MEM].nop = true;
-	instructions[WB].nop = true;
 
 	//initialize forwarding flag info (register and pipeline stage)
 	forward_stage_t forward_stage_flag = NO_FWDH;
@@ -107,63 +70,20 @@ int main(int argc, char *argv[])
 		registers[j] = 0; //set registers to 0 to begin
 	}
 
-	int i = arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
+	arrayMemImageFill(memory, addressFile); //to fill the memory with the file inputs in one loop (to avoid looping through the file many times)
 
-	while (mips_status_struct.halt == false)
+	while (status.halt == false)
 	{
-		if (!wblock)
-		{
-			printf("in WB\n");
-			writeback_stage(instructions, &mips_status_struct, registers, regChange);
-			//printf("after the wb function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-		}
-
-		if (!memlock)
-		{
-			printf("in MEM\n");
-			memory_stage(instructions, &mips_status_struct, registers, memory, memChange);
-			//printf("after the mem function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-			wblock = false;
-		}
-
-		if (!exlock)
-		{
-			printf("in EX\n");
-			execution_stage(instructions, &mips_status_struct, registers, &forward_stage_flag, &forward_reg_flag);
-			//printf("after the ex function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-			memlock = false;
-		}
-		//printf("binary of instruction in ID: %x\n", instructions[ID].binary);
-
-		if (!idlock)
-		{
-			printf("in ID\n");
-			id_stage(instructions, &mips_status_struct, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
-			//printf("after the id function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-			exlock = false;
-		}
-
-		if (!iflock)
-		{
-			printf("in IF\n");
-			inst_fetch(instructions, registers, memory, &mips_status_struct, branch_control_signal, &hazard_flag); //IF stage
-			//printf("after the if function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-			idlock = false;
-		}
-
-		//printf("after the inst_fetch function, value of register 1: %x\n", registers[1]); //while coding checking
-		//printf("after the inst_fetch function, pc is: %x\n", mips_status_struct.pc);	  //while coding checking
-		//printf("i is: %d\n", i);
+		writeback_stage(instructions, &status, registers, regChange);
+		memory_stage(instructions, &status, registers, memory, memChange);
+		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag);
+		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
+		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
 	}
     
-    arithCount = mips_status_struct.count_arith; // number of each type of instruction executed
-	logiCount = mips_status_struct.count_logic;
-	memCount = mips_status_struct.count_memory_access;
-	ctlCount = mips_status_struct.count_control_flow;
-    nfTotalStall = mips_status_struct.count_stall;
     
-	printInstructionsByType(arithCount, logiCount, memCount, ctlCount, outputFile);
-	printRegPcStates(registers, regChange, mips_status_struct.pc, outputFile);
+	printInstructionsByType(status.count_arith, status.count_logic, status.count_memory_access, status.count_control_flow, outputFile);
+	printRegPcStates(registers, regChange, status.pc, outputFile);
 	printMemStates(memory, memChange, outputFile);
 	printNoForwardingHazards(nfHazards, nfTotalStall, nfTotalCycles, outputFile);
 	printForwardingHazards(fHazards, fTotalStall, fTotalCycles, outputFile);
@@ -326,7 +246,7 @@ void closeFile(FILE *inputFile)
 }
 
 //fill memory array with input values from input file
-int arrayMemImageFill(int32_t *memory_array, FILE *inputFile)
+void arrayMemImageFill(int32_t *memory_array, FILE *inputFile)
 {
 
 	int32_t maxArray = 1024;	//anything larger than 1024 from input file will be treated as an indication that the simulator is not functioning properly, professor gauranteed no larger than 1024 lines (4kB)
@@ -351,5 +271,42 @@ int arrayMemImageFill(int32_t *memory_array, FILE *inputFile)
 		printf("Input file seems to have more than 1024 lines. Please debug. %d lines have been read into memory array.\n", i); //fyi for user
 	}
 
-	return i;
+	return;
+}
+
+void initialize_status(mips_status_t* status, int mode, bool debug)
+{
+	status->debug 			= debug;
+	status->mode 			= mode;
+	status->pc 			= 0;		  //initialize the PC so that we can
+	status->npc 			= 0;
+	status->pc_branch 		= 4; //while coding checking, can otherwise initialize to zero
+	status->alu_temp 		= 0;
+	status->prior_alu_temp 		= 0;
+	status->mem_reg 		= 0;
+	status->temp_pc 		= 0;
+	status->jump_flag 		= false;
+	status->count_total 		= 0; //initialize counts to zero
+	status->count_arith 		= 0;
+	status->count_logic 		= 0;
+	status->count_memory_access 	= 0;
+	status->count_control_flow 	= 0;
+	status->count_stall 		= 0;
+	status->zero_flag 		= false;
+	status->jump_flag 		= false;
+	status->halt 			= false;
+
+	return;
+}
+
+void initialize_instructions(inst_t* instructions)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		instructions[IF].nop = true; //don't expect a nop into IF (using the hazard flag instead of the nop for the stalls in IF)
+		instructions[ID].nop = true;
+		instructions[EX].nop = true;
+		instructions[MEM].nop = true;
+		instructions[WB].nop = true;
+	}
 }

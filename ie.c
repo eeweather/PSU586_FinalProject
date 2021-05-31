@@ -270,7 +270,15 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             {
                 mips_status->zero_flag = true;
                 //printf("Conditional BEQ Branch is taken\n");
-                mips_status->pc = (current_int.imm + 4 + mips_status->pc);
+                //printf("before BEQ math, imm: %d and pc: %d\n", current_int.imm,(int) mips_status->pc);
+                instructions[IF].binary = 0; //maybe dont need
+                instructions[IF].opcode = NON; //maybe dont need
+                if(current_int.imm >= 8){
+                    instructions[ID].binary = 0; //maybe dont need
+                    instructions[ID].opcode = NON; //maybe dont need
+                }
+                mips_status->pc = (current_int.imm -4 + mips_status->pc);
+                //printf("pc after adding imm in BEQ: %d\n", (int) mips_status->pc);
                 mips_status->temp_pc = (mips_status->pc << 2);
                 mips_status->count_control_flow++;
                 mips_status->count_total++;

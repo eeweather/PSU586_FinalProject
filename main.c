@@ -287,7 +287,7 @@ void initialize_instructions(inst_t* instructions)
 {
 	for (int index = 0; index < 5; index++)
 	{
-    		instructions[index].binary 		= 0; //maybe dont need
+    	instructions[index].binary 		= 0; //maybe dont need
    		instructions[index].type 		= 'r';
    		instructions[index].opcode 		= NON;
    	 	instructions[index].rs 			= 0;  //removed separate rs and rt for instruction types

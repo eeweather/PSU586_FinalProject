@@ -114,7 +114,7 @@ int getMode(int index, char* commands[]);
 FILE* openInputFile(const char* inputFile);
 FILE* openOutputFile(const char* outputFile);
 void closeFile(FILE* inputFile);
-int arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
+void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
 
 //function prototypes for pipeline stages
 void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal, bool* hazard_flag);
@@ -123,5 +123,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, 
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[]);
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[]);
 
+void initialize_status(mips_status_t* status, int mode, bool debug);
 
 #endif

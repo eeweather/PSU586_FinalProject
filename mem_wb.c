@@ -1,7 +1,7 @@
 #include "main.h"
 
 // MEM stage of pipeline
-void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
+bool memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
 {
 	instructions[MEM] = instructions[EX];
 	opcode_t opcode = instructions[MEM].opcode;
@@ -11,13 +11,21 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	if (instructions[MEM].nop == false)
 	{
 		if (opcode == LDW)	// load instruction
-		{	// load value from memory into temporary register
-			mips_status->mem_reg = memory[alu_temp>>2];
+		{
+			mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
 		}
 		else if (opcode == STW)	// store instruction
-		{	// store contents of register to memory address
-			memory[alu_temp>>2] = registers[rt];
+		{
+			memory[alu_temp>>2] = registers[rt];	// store contents of register to memory address
 			memChange[alu_temp>>2] = true;
+		}
+		else if (opcode == ADD || opcode == SUB || opcode == MUL || opcode == OR || opcode == AND || opcode == XOR)
+		{
+			mips_status->mem_reg = alu_temp;	// push alu value down the pipeline into mem-wb register
+		}
+		else if (opcode == ADDI	|| opcode == SUBI || opcode == MULI || opcode == ORI || opcode == ANDI || opcode == XORI)
+		{
+			mips_status->mem_reg = alu_temp;	// push alu value down the pipeline into mem-wb register
 		}
 	}
 	if (mips_status->jump_flag == TRUE)
@@ -32,9 +40,10 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	if (instructions[MEM].opcode == HALT)
 	{
 		mips_status->halt = true;
+		return true;
 	}
 
-	return;
+	return false;
 }
 
 // WB stage of pipeline
@@ -42,9 +51,9 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 {
 	instructions[WB]=instructions[MEM];
 	opcode_t opcode = instructions[WB].opcode;
-	uint32_t alu_temp = mips_status->alu_temp;
 	uint8_t rt = instructions[WB].rt;
 	uint8_t rd = instructions[WB].rd;
+	uint32_t mem_reg = mips_status->mem_reg;
 
 	if (instructions[WB].nop == false)
 	{
@@ -53,7 +62,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	
 			if (rt != 0)
 			{
-				registers[rt] = mips_status->mem_reg;
+				registers[rt] = mem_reg;
 				regChange[rt] = true;
 			}
 		}
@@ -63,9 +72,8 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	
 			if (rd != 0)
 			{
-				registers[rd] = alu_temp;
+				registers[rd] = mem_reg;
 				regChange[rd] = true;
-				
 			}
 		}
 
@@ -74,16 +82,15 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 			// i type instruction
 			if(rt != 0)
 			{
-				registers[rt] = alu_temp;
+				registers[rt] = mem_reg;
 				regChange[rt] = true;
-				
 			}
 		}
 	}
 
 	else if (opcode == HALT)
 	{	// halt the program
-		mips_status->halt = TRUE;
+		mips_status->halt = true;
 	}
 
 	return;

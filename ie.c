@@ -214,13 +214,13 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //the effective address “A”, load the contents (32-bits) of the memory location at address
         //“A” into register Rt). Opcode: 001100
         case (LDW):
-            mips_status->mem_reg = rs_value + current_int.imm;
+            mips_status->alu_temp = rs_value + current_int.imm;
             // printf("Value of the register rs in r type:%d\n", rs_value);
             // printf("Value of the register rs in i type: %d\n", current_int.rs);
             // printf("Value of register type: %d\n", current_int.rs);
             // printf("Value of the register r1 in array:%d\n", registers[1]);
             // printf("Final value of the mem_reg variable: %d\n", mips_status_t->mem_reg);
-            mips_status->mem_reg = (mips_status->mem_reg / 4);
+            //mips_status->mem_reg = (mips_status->mem_reg / 4);
             //printf("Final value of the mem_reg variable after dividing it by 4: %d\n", mips_status_t->mem_reg);
             // mips_status_t->pc = mips_status_t->pc + 1;
             // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
@@ -233,8 +233,8 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //the effective address “A”, store the contents of register Rt (32-bits) at the memory
         //address “A”). Opcode: 001101
         case (STW):
-            mips_status->mem_reg = rs_value + current_int.imm;
-            mips_status->mem_reg = (mips_status->mem_reg / 4);
+            mips_status->alu_temp = rs_value + current_int.imm;
+            //mips_status->mem_reg = (mips_status->mem_reg / 4);
             // mips_status_t->pc = mips_status_t->pc + 1;
             // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_total++;

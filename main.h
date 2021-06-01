@@ -49,8 +49,7 @@ typedef enum {
 	BEQ	= 0xF,
 	JR	= 0x10,
     // Halt Op
-	HALT	= 0x11,
-    NON     = 0x12
+	HALT	= 0x11
 } opcode_t;
 
 //instruction structs

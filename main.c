@@ -289,7 +289,7 @@ void initialize_instructions(inst_t* instructions)
 	{
     	instructions[index].binary 		= 0; //maybe dont need
    		instructions[index].type 		= 'r';
-   		instructions[index].opcode 		= NON;
+   		instructions[index].opcode 		= ADD;
    	 	instructions[index].rs 			= 0;  //removed separate rs and rt for instruction types
    	 	instructions[index].rt 			= 0;
    	 	instructions[index].rd 			= 0;

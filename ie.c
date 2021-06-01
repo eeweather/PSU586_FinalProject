@@ -35,8 +35,10 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
 */
 
     instructions[EX] = instructions[ID];
+    //check for nop, and skip execution logic if true
     if(instructions[EX].nop == true){
     }
+    //check for forward flags
     else{
 
         inst_t current_int = instructions[EX];
@@ -71,6 +73,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         *forward_stage_flag = NO_FWDH; //resolve this back to no forwarding hazard until we get a true hazard error again
 
         //printf("current Opcode: %x-------------------------------\n",current_int.opcode);
+        //printf("current rd: %x-------------------------------\n",current_int.rd);
         
         mips_status->prior_alu_temp = mips_status->alu_temp; //copy the alu_temp to have for MEM forwarding (previous instruction info)
         switch (current_int.opcode)
@@ -78,46 +81,34 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //ADD Rd Rs Rt (Add the contents of registers Rs and Rt, transfer the result
         //to register Rd). Opcode: 000000
         case (ADD):
+            if(current_int.rd ==0){
+                break;  //if destination is zero, skip case
+            }
             mips_status->alu_temp = rs_value + rt_value;
-            //printf("Value of Temp register in ADD: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_arith++;
             mips_status->count_total++;
-            //printf("ADD arith count is %d\n", mips_status_t->count_arith);
             break;
 
         //ADDI Rt Rs Imm (Add the contents of register Rs to the immediate value “Imm”,
         //transfer the result to register Rt). Opcode: 000001
         case (ADDI):
             mips_status->alu_temp = rs_value + current_int.imm;
-            //printf("Value of Temp register in ADDI: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_arith++;
             mips_status->count_total++;
-            //printf("ADDI arith count is %d\n", mips_status_t->count_arith);
             break;
 
         //SUB Rd Rs Rt (Subtract the contents of register Rt from Rs, transfer the result to
         //register Rd). Opcode: 000010
         case (SUB):
             mips_status->alu_temp = rs_value - rt_value;
-            //printf("Value of Temp register in SUB: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_arith++;
             mips_status->count_total++;
-            //printf("SUB arith count is %d\n", mips_status_t->count_arith);
             break;
 
         //SUBI Rt Rs Imm (Subtract the immediate value “Imm” from the contents of register Rs,
         //transfer the result to register Rt). Opcode: 000011
         case (SUBI):
             mips_status->alu_temp = rs_value - current_int.imm;
-            //printf("Value of Temp register in SUBI: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_arith++;
             mips_status->count_total++;
             break;
@@ -126,9 +117,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //register Rd). Opcode: 000100
         case (MUL):
             mips_status->alu_temp = rs_value * rt_value;
-            //printf("Value of Temp register in MUL: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_arith++;
             mips_status->count_total++;
             break;
@@ -137,9 +125,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //“Imm”, transfer the result to register Rt). Opcode: 000101
         case (MULI):
             mips_status->alu_temp = rs_value * current_int.imm;
-            //printf("Value of Temp register in MULI: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_arith++;
             mips_status->count_total++;
             break;
@@ -148,9 +133,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //result to register Rd). Opcode: 000110
         case (OR):
             mips_status->alu_temp = rs_value | rt_value;
-            //printf("Value of Temp register in logical OR: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -159,9 +141,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //value “Imm”, transfer the result to register Rt). Opcode: 000111
         case (ORI):
             mips_status->alu_temp = rs_value | current_int.imm;
-            //printf("Value of Temp register in logical ORI: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -170,9 +149,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //result to register Rd). Opcode: 001000
         case (AND):
             mips_status->alu_temp = rs_value & rt_value;
-            //printf("Value of Temp register in logical AND: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -181,9 +157,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //immediate value “Imm”, transfer the result to register Rt). Opcode: 001001
         case (ANDI):
             mips_status->alu_temp = rs_value & current_int.imm;
-            //printf("Value of Temp register in logical ANDI: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -192,9 +165,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //result to register Rd). Opcode: 001010
         case (XOR):
             mips_status->alu_temp = rs_value ^ rt_value;
-            //printf("Value of Temp register in logical XOR: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -203,9 +173,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //immediate value “Imm”, transfer the result to register Rt). Opcode: 001011
         case (XORI):
             mips_status->alu_temp = rs_value ^ current_int.imm;
-            //printf("Value of Temp register in logical XORI: %d\n", mips_status_t->alu_temp);
-            // mips_status_t->pc = mips_status_t->pc + 1;
-            // mips_status_t->temp_pc = mips_status_t->temp_pc + 4;
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -272,10 +239,8 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
                 //printf("Conditional BEQ Branch is taken\n");
                 //printf("before BEQ math, imm: %d and pc: %d\n", current_int.imm,(int) mips_status->pc);
                 instructions[IF].binary = 0; //maybe dont need
-                instructions[IF].opcode = NON; //maybe dont need
                 if(current_int.imm >= 8){
                     instructions[ID].binary = 0; //maybe dont need
-                    instructions[ID].opcode = NON; //maybe dont need
                 }
                 mips_status->pc = (current_int.imm -4 + mips_status->pc);
                 //printf("pc after adding imm in BEQ: %d\n", (int) mips_status->pc);
@@ -311,10 +276,6 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             //printf(" Halt case\n");
             mips_status->count_control_flow++;
             mips_status->count_total++;
-            break;
-            
-        case (NON):
-            // Not an opcode, initialization as none
             break;
             
         // Simulator shouldn't reach the default state

@@ -125,9 +125,6 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 // current_inst.memtoreg = 0;
             }
             break;
-        case NON:
-            //nothing case
-            break;
         }
         //printf("ID opcode, %d.\n",current_inst.opcode);
         instructions[ID] = current_inst;

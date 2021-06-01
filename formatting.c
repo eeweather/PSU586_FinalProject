@@ -93,7 +93,7 @@ void printMemStates(int mem[], bool memChange[], FILE* outputFile)
 	{
 		if (memChange[i])
 		{
-			printf("\nAddress: %d, contents %d", i, mem[i]);
+			printf("\nAddress: %d, contents %d", i * 4, mem[i]);  //multiply i by 4 for PC
 		}
 	}
 	printf("\n");
@@ -105,7 +105,7 @@ void printMemStates(int mem[], bool memChange[], FILE* outputFile)
 	{
 		if (memChange[i])
 		{
-			fprintf(outputFile, "\nAddress: %d, contents %d", i, mem[i]);
+			fprintf(outputFile, "\nAddress: %d, contents %d", i * 4, mem[i]);  //multiply i by 4 for PC
 		}
 	}
 	fprintf(outputFile, "\n");

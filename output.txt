@@ -2,22 +2,25 @@
 
 Instruction counts
 
-Total number of instructions: 10
-Arithmetic instructions: 8
+Total number of instructions: 12
+Arithmetic instructions: 9
 Logical instructions: 0
-Memory access instructions: 0
+Memory access instructions: 1
 Control transfer instructions: 2
 
 
 Final register state
 
-Program Counter: 56
-R9: 6
-R10: 7
-R11: 8
-R12: 9
-R13: 10
-R14: 11
+Program Counter: 52
+R1: 1000
+R2: 1200
+R3: 2
+R7: 0
+R8: 0
+R9: 0
+R10: 0
+R11: 50
+R12: 32
 
 
 Final memory state

@@ -240,6 +240,35 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 printf("hazard_flag removed---------------FORWARDING from MEM_WB");
             }
         }
+        else if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)){
+            //enable forwarding - i-type RS in ID stage conflicts with Rt in MEM stage
+            //enable fowarding for RS from the MEM stage
+            *hazard_flag = true;
+
+            printf("hazard_flag set---------------EX Opcode: %d\n",instructions[ID].opcode);
+
+            if(mips_status->mode == FORWARDING){
+                *hazard_flag = false;
+                *forward_stage_flag = EX_MEM;
+                *forward_reg_flag = RS;
+                printf("hazard_flag removed---------------FORWARDING from EX_MEM");
+            }
+        }
+        
+        else if ((instructions[ID].rt == instructions[MEM].rd) && (instructions[MEM].rd != 0)){
+            //enable forwarding - i-type RS in ID stage conflicts with Rt in MEM stage
+            //enable fowarding for RS from the MEM stage
+            *hazard_flag = true;
+
+            printf("hazard_flag set---------------MEM Opcode: %d\n",instructions[ID].opcode);
+
+            if(mips_status->mode == FORWARDING){
+                *hazard_flag = false;
+                *forward_stage_flag = MEM_WB;
+                *forward_reg_flag = RT;
+                printf("hazard_flag removed---------------FORWARDING from MEM_WB");
+            }
+        }
         
     }
     //printf(*hazard_flag ? "hazard true\n" : "no hazard\n");

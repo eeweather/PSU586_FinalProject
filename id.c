@@ -155,8 +155,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     // If not a LDW command then enable forwarding for RS
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------EX Opcode: %d\n", instructions[ID].opcode);
-
+                    printf("hazard_flag set---------------EX Opcode: %d, ID Opcode: %d\n", instructions[EX].opcode, instructions[ID].opcode);
                     if (mips_status->mode == FORWARDING)
                     {
                         if (instructions[EX].opcode == LDW)
@@ -182,7 +181,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     // If not a LDW command then enable forwarding for RS
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------EX Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------EX Opcode: %d, ID Opcode: %d\n", instructions[EX].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {
@@ -214,7 +213,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     // If not a LDW command then enable forwarding for RS
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------EX Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------EX Opcode: %d, ID Opcode: %d\n", instructions[EX].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {
@@ -241,7 +240,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     // If not a LDW command then enable forwarding for RS
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------EX Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------EX Opcode: %d, ID Opcode: %d\n", instructions[EX].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {
@@ -277,7 +276,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     //enable fowarding for RS from the MEM stage
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------MEM Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------MEM Opcode: %d, ID Opcode: %d\n", instructions[MEM].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {
@@ -297,7 +296,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     //enable fowarding for RS from the MEM stage
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------MEM Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------MEM Opcode: %d, ID Opcode: %d\n", instructions[MEM].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {
@@ -322,7 +321,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     //enable fowarding for RS from the MEM stage
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------MEM Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------MEM Opcode: %d, ID Opcode: %d\n", instructions[MEM].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {
@@ -342,7 +341,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     //enable fowarding for RS from the MEM stage
                     *hazard_flag = true;
 
-                    printf("hazard_flag set---------------MEM Opcode: %d\n", instructions[ID].opcode);
+                    printf("hazard_flag set---------------MEM Opcode: %d, ID Opcode: %d\n", instructions[MEM].opcode, instructions[ID].opcode);
 
                     if (mips_status->mode == FORWARDING)
                     {

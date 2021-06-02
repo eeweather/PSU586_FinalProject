@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
+		status.cycles++;
 
 //		char* str[1024];
 //		gets(str);
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
     
     
 	printInstructionsByType(status.count_arith, status.count_logic, status.count_memory_access, status.count_control_flow, outputFile);
+	status.pc = status.pc - 8; //this is done in order to uncount the last mem if mem sequence that happens after a stall
 	printRegPcStates(registers, regChange, status.pc, outputFile);
 	printMemStates(memory, memChange, outputFile);
 	printHazards(status.count_hazards, status.count_stall, status.cycles, outputFile);
@@ -279,6 +281,7 @@ void initialize_status(mips_status_t* status, int mode, bool debug)
 	status->count_logic 		= 0;
 	status->count_memory_access 	= 0;
 	status->count_control_flow 	= 0;
+	status->cycles				= 0;
 	status->count_stall 		= 0;
 	status->flushcount			= 0;
 	status->zero_flag 		= false;

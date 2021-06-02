@@ -143,11 +143,11 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
         
         
         // EX forwarding r-type
-        if (instructions[EX].type == 114)
+        if (instructions[EX].type == 'r' && (instructions[EX].nop == false))
         { //r-type is 114
         
             // ID = r-type
-            if((instructions[ID].type == 114) || (instructions[ID].opcode == BEQ))
+            if((instructions[ID].type == 'r') || (instructions[ID].opcode == BEQ))
             {
                 if (((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0)) || ((instructions[ID].rt == instructions[EX].rd) && (instructions[EX].rd != 0)))
                 {
@@ -174,7 +174,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 }
             }    
             // ID = i-type
-            else if((instructions[ID].type == 105))
+            else if((instructions[ID].type == 'i'))
             {
                 if ((instructions[ID].rs == instructions[EX].rd) && (instructions[EX].rd != 0))
                 {
@@ -203,10 +203,10 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
             }
         } 
         // EX forwarding i-type
-        if (instructions[EX].type == 105)
+        else if (instructions[EX].type == 'i' && (instructions[EX].nop == false))
         { //r-type is 114
             // ID = r-type
-            if((instructions[ID].type == 114) || (instructions[ID].opcode == BEQ))
+            if((instructions[ID].type == 'r') || (instructions[ID].opcode == BEQ))
             {
                 if (((instructions[ID].rs == instructions[EX].rt) && (instructions[EX].rt != 0)) || ((instructions[ID].rt == instructions[EX].rt) && (instructions[EX].rt != 0)))
                 {
@@ -233,7 +233,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 }
             } 
             // ID = i-type       
-            else if((instructions[ID].type == 105))
+            else if((instructions[ID].type == 'i'))
             {
                 if ((instructions[ID].rs == instructions[EX].rt) && (instructions[EX].rt != 0))
                 {
@@ -265,11 +265,11 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
         
         // MEM forwarding r-type
         
-        if (instructions[MEM].type == 114)
+        else if (instructions[MEM].type == 'r' && (instructions[MEM].nop == false))
         { //r-type is 114
         
             // ID = r-type
-            if((instructions[ID].type == 114) || (instructions[ID].opcode == BEQ))
+            if((instructions[ID].type == 'r') || (instructions[ID].opcode == BEQ))
             {
                 if (((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0)) || ((instructions[ID].rt == instructions[MEM].rd) && (instructions[MEM].rd != 0)))
                 {
@@ -289,7 +289,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 }
             }
             // ID = i-type
-            else if((instructions[ID].type == 105))
+            else if((instructions[ID].type == 'i'))
             {
                 if ((instructions[ID].rs == instructions[MEM].rd) && (instructions[MEM].rd != 0))
                 {
@@ -310,11 +310,11 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
             }
         }    
         // MEM forwarding i-type
-        if (instructions[MEM].type == 105)
+        else if (instructions[MEM].type == 'i' && (instructions[MEM].nop == false))
         { //r-type is 114
         
             // ID = r-type
-            if((instructions[ID].type == 114))
+            if((instructions[ID].type == 'r'))
             {
                 if (((instructions[ID].rs == instructions[MEM].rt) && (instructions[MEM].rt != 0)) || ((instructions[ID].rt == instructions[MEM].rt) && (instructions[MEM].rt != 0)))
                 {
@@ -334,7 +334,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                 }
             }
             // ID = i-type
-            else if((instructions[ID].type == 105))
+            else if((instructions[ID].type == 'i'))
             {
                 if ((instructions[ID].rs == instructions[MEM].rs) && (instructions[MEM].rd != 0))
                 {

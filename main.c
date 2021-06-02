@@ -66,6 +66,9 @@ int main(int argc, char *argv[])
 		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
+
+//		char* str[1024];
+//		gets(str);
 	}
     
     

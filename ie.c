@@ -87,6 +87,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
                 break;  //if destination is zero, skip case
             }
             mips_status->alu_temp = rs_value + rt_value;
+            //printf("ADD, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
             mips_status->count_arith++;
             break;
 
@@ -94,6 +95,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //transfer the result to register Rt). Opcode: 000001
         case (ADDI):
             mips_status->alu_temp = rs_value + current_int.imm;
+            //printf("ADDI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_arith++;
             break;
 
@@ -101,6 +103,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //register Rd). Opcode: 000010
         case (SUB):
             mips_status->alu_temp = rs_value - rt_value;
+            //printf("SUB, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
             mips_status->count_arith++;
             break;
 
@@ -150,6 +153,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //immediate value “Imm”, transfer the result to register Rt). Opcode: 001001
         case (ANDI):
             mips_status->alu_temp = rs_value & current_int.imm;
+            //printf("ANDI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_logic++;
             break;
 
@@ -172,6 +176,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //“A” into register Rt). Opcode: 001100
         case (LDW):
             mips_status->alu_temp = rs_value + current_int.imm;
+            //printf("LDW, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_memory_access++;
             break;
 
@@ -179,8 +184,8 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //the effective address “A”, store the contents of register Rt (32-bits) at the memory
         //address “A”). Opcode: 001101
         case (STW):
-            printf("in store word\n");
             mips_status->alu_temp = rs_value + current_int.imm;
+            //printf("STW, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_memory_access++;
             break;
 
@@ -193,7 +198,8 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
                 mips_status->flushcount=2;
                 //instructions[IF].nop = TRUE;
                 //instructions[ID].nop = TRUE;
-                mips_status->alu_temp = ((current_int.imm<<2) + mips_status->pc);
+                mips_status->alu_temp = (((current_int.imm<<2)-4) + mips_status->pc);
+                //printf("BZ taken, alu temp: %d, imm: %d, imm<<2: %d, pc: %d\n", mips_status->alu_temp, current_int.imm, (current_int.imm<<2), mips_status->pc);
                 mips_status->count_control_flow++;
             }
             else
@@ -213,8 +219,9 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
                 
                 //instructions[IF].nop = TRUE;
                 //instructions[ID].nop = TRUE;
-                //printf("before BEQ math, imm: %d and pc: %d\n", current_int.imm,(int) mips_status->pc);
+                //printf("before BEQ (taken) math, imm: %d and pc: %d\n", current_int.imm,(int) mips_status->pc);
                 mips_status->alu_temp = (((current_int.imm<<2) - 4) + mips_status->pc);
+                //printf("BEQ taken, alu temp: %d, imm: %d, imm<<2-4: %d, pc: %d\n", mips_status->alu_temp, current_int.imm, ((current_int.imm<<2) -4), mips_status->pc);
                 mips_status->count_control_flow++;
             }
             else
@@ -233,6 +240,8 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             instructions[ID].nop = TRUE;
             //printf(" Unconditional Branch is taken\n");
             mips_status->alu_temp = (rs_value +4 );
+            //printf("JR taken, alu temp: %d, rs: %d, rs+4: %d", mips_status->alu_temp, rs_value, (rs_value +4) );
+
             mips_status->count_control_flow++;
             break;
             
@@ -244,7 +253,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             
         // Simulator shouldn't reach the default state
         default:
-            printf("Default Case reached in Execute Stage.  Something isn't working.\n");
+            //printf("Default Case reached in Execute Stage.  Something isn't working.\n");
             break;
         }
         //printf("current count: %d-------------------------------\n",mips_status->count_total);

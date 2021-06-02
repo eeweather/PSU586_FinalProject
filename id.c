@@ -356,7 +356,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
   
         //printf(*hazard_flag ? "hazard true\n" : "no hazard\n");
     }
-    if (instructions[ID].nop == true || *hazard_flag == true)
+    if (*hazard_flag == true)
     {
         //do nothing
         instructions[ID].nop = true;

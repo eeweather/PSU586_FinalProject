@@ -27,10 +27,9 @@ void increment_pc(struct mips_status* status_struct);
 //pass in: filename, mainc structure with pc and pc_branch, control signal, pointer to register array
 //pass out: register with needed value, R1 for now
 void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips_status_t* status_struct, int32_t branch_signal, bool* hazard_flag){
-
     inst_t current_instruction;
 
-    printf("pc to fetch: %d\n", status_struct->pc);
+    printf("pc to fetch in IF: %d\n", status_struct->pc);
 
     if(*hazard_flag == true){
         printf("hazard was set => not pulling mem into IF*************\n");

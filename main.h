@@ -89,6 +89,7 @@ typedef struct mips_status
     uint16_t count_stall;
     uint16_t count_hazards;
     uint16_t cycles;
+    int flushcount;
     bool     zero_flag;
     bool     jump_flag;
     bool     halt;

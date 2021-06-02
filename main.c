@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 		writeback_stage(instructions, &status, registers, regChange);
 		memory_stage(instructions, &status, registers, memory, memChange);
         if (status.halt == true){
+			printf("Halting\n");
             break;}
 		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
@@ -276,6 +277,7 @@ void initialize_status(mips_status_t* status, int mode, bool debug)
 	status->count_memory_access 	= 0;
 	status->count_control_flow 	= 0;
 	status->count_stall 		= 0;
+	status->flushcount			= 0;
 	status->zero_flag 		= false;
 	status->jump_flag 		= false;
 	status->halt 			= false;

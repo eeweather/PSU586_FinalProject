@@ -10,7 +10,7 @@
 #include "main.h"
 
 void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag)
-{
+{ 
 
 /*
     switch (*forward_stage_flag){
@@ -36,7 +36,9 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
 
     instructions[EX] = instructions[ID];
     //check for nop, and skip execution logic if true
+
     if(instructions[EX].nop == true){
+        //do nopthing
     }
     //check for forward flags
     else{
@@ -72,7 +74,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         }
         *forward_stage_flag = NO_FWDH; //resolve this back to no forwarding hazard until we get a true hazard error again
 
-        //printf("current Opcode: %x-------------------------------\n",current_int.opcode);
+        printf("current Opcode: %x-------------------------------\n",current_int.opcode);
         //printf("current rd: %x-------------------------------\n",current_int.rd);
         
         mips_status->prior_alu_temp = mips_status->alu_temp; //copy the alu_temp to have for MEM forwarding (previous instruction info)
@@ -101,6 +103,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //register Rd). Opcode: 000010
         case (SUB):
             mips_status->alu_temp = rs_value - rt_value;
+            printf("rs: %d, rt: %d, alu temp in sub: %d\n",rs_value, rt_value, mips_status->alu_temp);
             mips_status->count_arith++;
             mips_status->count_total++;
             break;
@@ -157,6 +160,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //immediate value “Imm”, transfer the result to register Rt). Opcode: 001001
         case (ANDI):
             mips_status->alu_temp = rs_value & current_int.imm;
+            printf("rs: %d, imm: %d, andi alu temp: %d\n",rs_value, current_int.imm, mips_status->alu_temp);
             mips_status->count_logic++;
             mips_status->count_total++;
             break;
@@ -200,6 +204,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //the effective address “A”, store the contents of register Rt (32-bits) at the memory
         //address “A”). Opcode: 001101
         case (STW):
+            printf("in store word\n");
             mips_status->alu_temp = rs_value + current_int.imm;
             //mips_status->mem_reg = (mips_status->mem_reg / 4);
             // mips_status_t->pc = mips_status_t->pc + 1;
@@ -213,10 +218,12 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         case (BZ):
             if ((rs_value) == 0)
             {
-                mips_status->zero_flag = true;
-                //printf("Conditional BZ  Branch is taken\n");
-                mips_status->pc = (current_int.imm + mips_status->pc);
-                mips_status->temp_pc = (mips_status->pc << 2);
+                mips_status->jump_flag = true;
+                mips_status->flushcount=2;
+                //instructions[IF].nop = TRUE;
+                //instructions[ID].nop = TRUE;
+                mips_status->alu_temp = ((current_int.imm<<2) + mips_status->pc);
+                //mips_status->temp_pc = (mips_status->pc << 2);
                 mips_status->count_control_flow++;
                 mips_status->count_total++;
             }
@@ -235,16 +242,20 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         case (BEQ):
             if ((rt_value) == (rs_value))
             {
-                mips_status->zero_flag = true;
-                //printf("Conditional BEQ Branch is taken\n");
+                mips_status->jump_flag = true;
+                mips_status->flushcount=2;
+                
+                //instructions[IF].nop = TRUE;
+                //instructions[ID].nop = TRUE;
                 //printf("before BEQ math, imm: %d and pc: %d\n", current_int.imm,(int) mips_status->pc);
-                instructions[IF].binary = 0; //maybe dont need
-                if(current_int.imm >= 8){
-                    instructions[ID].binary = 0; //maybe dont need
-                }
-                mips_status->pc = (current_int.imm -4 + mips_status->pc);
+                //instructions[IF].binary = 0; //maybe dont need
+                // if(current_int.imm >= 8){
+                //     instructions[ID].binary = 0; //maybe dont need
+                // }
+                mips_status->alu_temp = ((current_int.imm<<2) + mips_status->pc);
+                //mips_status->pc = (current_int.imm -4 + mips_status->pc);
                 //printf("pc after adding imm in BEQ: %d\n", (int) mips_status->pc);
-                mips_status->temp_pc = (mips_status->pc << 2);
+                //mips_status->temp_pc = (mips_status->pc << 2);
                 mips_status->count_control_flow++;
                 mips_status->count_total++;
                 //printf("Control flow count is %d\n", mips_status_t->count_control_flow);
@@ -264,8 +275,11 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //PC). Opcode: 010000
         case (JR):
             mips_status->jump_flag = true;
+            mips_status->flushcount=2;
+            //instructions[IF].nop = TRUE;
+            instructions[ID].nop = TRUE;
             //printf(" Unconditional Branch is taken\n");
-            // mips_status_t->temp_pc = rs_value;
+            mips_status->alu_temp = (rs_value +4 );
             // mips_status_t->pc = (mips_status_t->temp_pc / 4);
             mips_status->count_control_flow++;
             mips_status->count_total++;
@@ -284,8 +298,13 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             break;
         }
         //printf("current count: %d-------------------------------\n",mips_status->count_total);
-        printf("current pc: %d\n",mips_status->pc);
+        //printf("current pc: %d\n",mips_status->pc);
         instructions[EX] = current_int;
     }
+    printf("nop in IF-----------------%d\n",instructions[IF].nop);
+    printf("nop in ID-----------------%d\n",instructions[ID].nop);
+    printf("nop in EX-----------------%d\n",instructions[EX].nop);
+    printf("nop in MEM-----------------%d\n",instructions[MEM].nop);
+    printf("nop in WB-----------------%d\n",instructions[WB].nop);
     return;
 }

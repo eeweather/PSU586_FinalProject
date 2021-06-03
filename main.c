@@ -62,9 +62,9 @@ int main(int argc, char *argv[])
 	{
 		writeback_stage(instructions, &status, registers, regChange);
 		memory_stage(instructions, &status, registers, memory, memChange, mem_values, ex_values);
-        if (status.halt == true){
-			printf("Halting\n");
-            break;}
+//        if (status.halt == true){
+//			printf("Halting\n");
+//            break;}
 		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag, mem_values, ex_values);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 	status.pc = status.pc - 8; //this is done in order to uncount the last mem if mem sequence that happens after a stall
 	printRegPcStates(registers, regChange, status.pc, outputFile);
 	printMemStates(memory, memChange, outputFile);
-	printHazards(status.count_hazards, status.count_stall, status.cycles, outputFile);
+	printHazards(status.mode, status.count_hazards, status.count_stall, status.cycles, outputFile);
 
 	closeFile(addressFile); // close the input file
 	closeFile(outputFile);	// close the output file

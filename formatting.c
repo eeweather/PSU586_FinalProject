@@ -119,25 +119,31 @@ void printMemStates(int mem[], bool memChange[], FILE* outputFile)
 // hazards: number of data hazards 
 // totalStall: total stall from data hazards
 // totalCycles: total execution time in clock cycles
-void printHazards(int hazards, int totalStall, int totalCycles, FILE* outputFile)
+void printHazards(int mode, int hazards, int totalStall, int totalCycles, FILE* outputFile)
 {
 	float avgStall = ((float)totalStall) / ((float)hazards);
 
-	printf("\n");
-	printf("\nTotal hazards: %d", hazards);
-	printf("\nTotal stalls: %d", totalStall);
-	printf("\nAverage stall per hazard: %f", avgStall);
-	printf("\n");
-	printf("\nTotal execution time: %d", totalCycles);
-	printf("\n");
+    if(mode == 0)
+    {
+    }
+    else
+    {
+        printf("\n");
+        printf("\nTotal hazards: %d", hazards);
+        printf("\nTotal stalls: %d", totalStall);
+        printf("\nAverage stall per hazard: %f", avgStall);
+        printf("\n");
+        printf("\nTotal execution time: %d", totalCycles);
+        printf("\n");
 
-	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nTotal hazards: %d", hazards);
-	fprintf(outputFile, "\nTotal stalls: %d", totalStall);
-	fprintf(outputFile, "\nAverage stall per hazard: %f", avgStall);
-	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nTotal execution time: %d", totalCycles);
-	fprintf(outputFile, "\n");
+        fprintf(outputFile, "\n");
+        fprintf(outputFile, "\nTotal hazards: %d", hazards);
+        fprintf(outputFile, "\nTotal stalls: %d", totalStall);
+        fprintf(outputFile, "\nAverage stall per hazard: %f", avgStall);
+        fprintf(outputFile, "\n");
+        fprintf(outputFile, "\nTotal execution time: %d", totalCycles);
+        fprintf(outputFile, "\n");
+    }
 
 	return;
 }

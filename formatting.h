@@ -7,6 +7,6 @@
 void printInstructionsByType(int arith, int logi, int mem, int ctl, FILE* outputFile);
 void printRegPcStates(int reg[], bool regChange[], int pc, FILE* outputFile);
 void printMemStates(int mem[], bool memChange[], FILE* outputFile);
-void printHazards(int hazards, int totalStall, int totalCycles, FILE* outputFile);
+void printHazards(int mode, int hazards, int totalStall, int totalCycles, FILE* outputFile);
 
 #endif

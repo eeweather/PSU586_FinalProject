@@ -290,6 +290,7 @@ void initialize_status(mips_status_t* status, int mode, bool debug)
 	status->jump_flag 		= false;
 	status->halt 			= false;
 	status->lwd_stall_flag = false;
+	status->count_hazards =0;
 
 	return;
 }

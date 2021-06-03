@@ -31,12 +31,12 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		}
 	}
 	else{
-		if(mips_status->lwd_stall_flag == true){
+		// if(mips_status->lwd_stall_flag == true){
 			
-			// printf("in mem lwd stall flag case\n");
-			mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
-			// printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
-		}
+		// 	// printf("in mem lwd stall flag case\n");
+		// 	mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
+		// 	// printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
+		// }
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
@@ -107,17 +107,17 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	}
 
 	else {
-		if(mips_status->lwd_stall_flag == true){
-			// printf("in wb lwd stall flag case\n");
-			if (rt != 0)
-			{
-				// printf("In WB LDW writing %d to register %d\n",mem_reg,rt);
-				registers[rt] = mem_reg;
-				regChange[rt] = true;
-			}
+		// if(mips_status->lwd_stall_flag == true){
+		// 	// printf("in wb lwd stall flag case\n");
+		// 	if (rt != 0)
+		// 	{
+		// 		// printf("In WB LDW writing %d to register %d\n",mem_reg,rt);
+		// 		registers[rt] = mem_reg;
+		// 		regChange[rt] = true;
+		// 	}
 
-			mips_status->lwd_stall_flag = false;
-		}
+		// 	mips_status->lwd_stall_flag = false;
+		// }
 	}
 
 	if (opcode == HALT)

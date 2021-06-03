@@ -33,10 +33,8 @@ Address: 1404, contents 2550
 Address: 1408, contents 1275
 
 
-Forwarding case
+Total hazards: 350
+Total stalls: 300
+Average stall per hazard: 0.857143
 
-Total hazards: 8
-Total stalls: 50
-Average stall per hazard: 6.250000
-
-Total execution time: 842
+Total execution time: 1092

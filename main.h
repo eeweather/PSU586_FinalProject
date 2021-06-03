@@ -94,6 +94,9 @@ typedef struct mips_status
     bool     jump_flag;
     bool     halt;
     bool     lwd_stall_flag;
+    
+
+
 } mips_status_t;
 
 typedef struct mem_stage_values

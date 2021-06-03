@@ -33,8 +33,8 @@ Address: 1404, contents 2550
 Address: 1408, contents 1275
 
 
-Total hazards: 250
+Total hazards: 251
 Total stalls: 50
-Average stall per hazard: 0.200000
+Average stall per hazard: 0.199203
 
 Total execution time: 843

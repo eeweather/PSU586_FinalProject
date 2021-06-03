@@ -216,7 +216,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
         { 
         
             // ID = r-type
-            if((instructions[ID].type == 'r'))
+            if((instructions[ID].type == 'r')|| instructions[ID].opcode == BEQ)
             {
                 if (((instructions[ID].rs == instructions[MEM].rt) && (instructions[MEM].rt != 0)))
                 {

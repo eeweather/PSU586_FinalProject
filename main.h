@@ -93,6 +93,7 @@ typedef struct mips_status
     bool     zero_flag;
     bool     jump_flag;
     bool     halt;
+    bool     lwd_stall_flag;
 } mips_status_t;
 
 typedef struct mem_stage_values
@@ -114,7 +115,7 @@ int hazard_flag;
 typedef enum{
     NO_FWDH = 0x0, //for the case when we don't have any forwarding hazards
     EX_MEM = 0x1, //also consider as EX
-    MEM_WB = 0x2 //also consider as MEM
+    MEM_WB = 0x2, //also consider as MEM
 } forward_stage_t;
 
 typedef enum{

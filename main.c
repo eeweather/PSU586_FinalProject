@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
 	int32_t memory[1024];	//initialize the memory storage array
 	bool 	memChange[1024];
 	inst_t	instructions[5]; //initializing instruction array
-	mem_stage_values_t mem_values[2];
-	ex_stage_values_t ex_values[2];
+	mem_stage_values_t mem_values[3];
+	ex_stage_values_t ex_values[3];
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
 
@@ -289,6 +289,7 @@ void initialize_status(mips_status_t* status, int mode, bool debug)
 	status->zero_flag 		= false;
 	status->jump_flag 		= false;
 	status->halt 			= false;
+	status->lwd_stall_flag = false;
 
 	return;
 }

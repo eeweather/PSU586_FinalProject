@@ -33,8 +33,8 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips
     printf("pc to fetch in IF: %d\n", status_struct->pc);
 
     if(*hazard_flag > 0){
-        printf("hazard was set => not pulling mem into IF*************\n");
         status_struct->count_stall++;
+        printf("Stall is: %d\n", status_struct->count_stall);
         temp = *hazard_flag - 1;
         *hazard_flag= temp;
     }

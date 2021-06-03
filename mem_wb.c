@@ -2,7 +2,7 @@
 
 // MEM stage of pipeline
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[], mem_stage_values_t mem_values[], ex_stage_values_t ex_values[])
-{printf("in MEM\n");
+{
 	
 	instructions[MEM] = instructions[EX];
 	opcode_t opcode = instructions[MEM].opcode;
@@ -14,7 +14,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		if (opcode == LDW)	// load instruction
 		{
 			mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
-			printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
+			// printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
 		}
 		else if (opcode == STW)	// store instruction
 		{
@@ -28,6 +28,14 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		else if (opcode == ADDI	|| opcode == SUBI || opcode == MULI || opcode == ORI || opcode == ANDI || opcode == XORI)
 		{
 			mips_status->mem_reg = alu_temp;	// push alu value down the pipeline into mem-wb register
+		}
+	}
+	else{
+		if(mips_status->lwd_stall_flag == true){
+			
+			// printf("in mem lwd stall flag case\n");
+			mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
+			// printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
 		}
 	}
 	if (mips_status->jump_flag == TRUE)
@@ -47,7 +55,8 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	{
 		mips_status->halt = true;
 	}
-
+	
+	mem_values[2]=mem_values[1];
 	mem_values[1]=mem_values[0];
 	mem_values[0].mem_reg=mips_status->mem_reg;
 
@@ -70,7 +79,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	
 			if (rt != 0)
 			{
-				printf("In WB LDW writing %d to register %d\n",mem_reg,rt);
+				// printf("In WB LDW writing %d to register %d\n",mem_reg,rt);
 				registers[rt] = mem_reg;
 				regChange[rt] = true;
 			}
@@ -97,7 +106,21 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 		}
 	}
 
-	else if (opcode == HALT)
+	else {
+		if(mips_status->lwd_stall_flag == true){
+			// printf("in wb lwd stall flag case\n");
+			if (rt != 0)
+			{
+				// printf("In WB LDW writing %d to register %d\n",mem_reg,rt);
+				registers[rt] = mem_reg;
+				regChange[rt] = true;
+			}
+
+			mips_status->lwd_stall_flag = false;
+		}
+	}
+
+	if (opcode == HALT)
 	{	// halt the program
 		mips_status->halt = true;
 	}

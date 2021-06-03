@@ -1,8 +1,9 @@
 #include "main.h"
 
 // MEM stage of pipeline
-void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[])
+void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[], mem_stage_values_t mem_values[], ex_stage_values_t ex_values[])
 {printf("in MEM\n");
+	
 	instructions[MEM] = instructions[EX];
 	opcode_t opcode = instructions[MEM].opcode;
 	uint32_t alu_temp = mips_status->alu_temp;
@@ -31,7 +32,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
-	printf("jumping\n");
+		printf("jumping\n");
 		mips_status->pc = alu_temp -4;
 		//jump complete, turn off flag
 		//mips_status->flushcount=2;
@@ -46,6 +47,9 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	{
 		mips_status->halt = true;
 	}
+
+	mem_values[1]=mem_values[0];
+	mem_values[0].mem_reg=mips_status->mem_reg;
 
 	return;
 }

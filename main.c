@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 	int32_t memory[1024];	//initialize the memory storage array
 	bool 	memChange[1024];
 	inst_t	instructions[5]; //initializing instruction array
+	mem_stage_values_t mem_values[2];
+	ex_stage_values_t ex_values[2];
 
 	int32_t branch_control_signal = 0; //mock branch control signal to use in IF stage for now. 0 means no branch to be taken, 1 means branch to be taken
 
@@ -59,11 +61,11 @@ int main(int argc, char *argv[])
 	while (status.halt == false)
 	{
 		writeback_stage(instructions, &status, registers, regChange);
-		memory_stage(instructions, &status, registers, memory, memChange);
+		memory_stage(instructions, &status, registers, memory, memChange, mem_values, ex_values);
         if (status.halt == true){
 			printf("Halting\n");
             break;}
-		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag);
+		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag, mem_values, ex_values);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
 		status.cycles++;

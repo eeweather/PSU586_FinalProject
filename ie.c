@@ -9,7 +9,7 @@
 
 #include "main.h"
 
-void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag)
+void execution_stage (inst_t instructions[], struct mips_status *mips_status, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag, mem_stage_values_t mem_values[], ex_stage_values_t ex_values[])
 { 
 
 /*
@@ -33,6 +33,7 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
             break;
     }
 */
+    
 
     instructions[EX] = instructions[ID];
     //check for nop, and skip execution logic if true
@@ -266,6 +267,11 @@ void execution_stage(inst_t instructions[], mips_status_t *mips_status, int32_t 
         //printf("current pc: %d\n",mips_status->pc);
         instructions[EX] = current_int;
     }
+
+    ex_values[1]=ex_values[0];
+	// ex_values[0]->rs_value= rs_value;
+    // ex_values[0]->rt_value= rt_value;
+    ex_values[0].alu_temp= mips_status->alu_temp;
 //    printf("nop in IF-----------------%d\n",instructions[IF].nop);
 //    printf("nop in ID-----------------%d\n",instructions[ID].nop);
 //    printf("nop in EX-----------------%d\n",instructions[EX].nop);

@@ -98,13 +98,13 @@ typedef struct mips_status
 typedef struct mem_stage_values
 {
     uint32_t mem_reg;
-    uint32_t alu_temp;
 } mem_stage_values_t;
 
 typedef struct ex_stage_values
 {
-    uint32_t mem_reg;
-    uint32_t alu_temp;
+//     int32_t rs_value;
+//     int32_t rt_value;
+    int32_t alu_temp;
 } ex_stage_values_t;
 
 
@@ -135,8 +135,8 @@ void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
 //function prototypes for pipeline stages
 void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal, int* hazard_flag);
 void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], int* hazard_flag, forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag);
-void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag);
-void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[]);
+void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag, mem_stage_values_t mem_values[], ex_stage_values_t ex_values[]);
+void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[], mem_stage_values_t mem_values[], ex_stage_values_t ex_values[]);
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[]);
 
 void initialize_status(mips_status_t* status, int mode, bool debug);

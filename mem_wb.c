@@ -13,6 +13,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		if (opcode == LDW)	// load instruction
 		{
 			mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
+			printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
 		}
 		else if (opcode == STW)	// store instruction
 		{
@@ -65,6 +66,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	
 			if (rt != 0)
 			{
+				printf("In WB LDW writing %d to register %d\n",mem_reg,rt);
 				registers[rt] = mem_reg;
 				regChange[rt] = true;
 			}

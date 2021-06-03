@@ -26,14 +26,17 @@ void increment_pc(struct mips_status* status_struct);
 //instruction fetch function to be accessible in main.c
 //pass in: filename, mainc structure with pc and pc_branch, control signal, pointer to register array
 //pass out: register with needed value, R1 for now
-void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips_status_t* status_struct, int32_t branch_signal, bool* hazard_flag){
+void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips_status_t* status_struct, int32_t branch_signal, int* hazard_flag){
     inst_t current_instruction;
+    int temp;
 
     printf("pc to fetch in IF: %d\n", status_struct->pc);
 
-    if(*hazard_flag == true){
+    if(*hazard_flag > 0){
         printf("hazard was set => not pulling mem into IF*************\n");
         status_struct->count_stall++;
+        temp = *hazard_flag - 1;
+        *hazard_flag= temp;
     }
     else{
     current_instruction.binary = memory[status_struct->pc>>2]; //gather data from memory at chosen pc

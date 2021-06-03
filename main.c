@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	initialize_changeArrays(memChange, regChange);
 	initialize_instructions(instructions);
 
-	hazard_flag = false; //initialize hazard flag
+	hazard_flag = 0; //initialize hazard flag
 
 	//initialize forwarding flag info (register and pipeline stage)
 	forward_stage_t forward_stage_flag = NO_FWDH;

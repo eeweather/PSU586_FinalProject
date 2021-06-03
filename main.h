@@ -95,8 +95,21 @@ typedef struct mips_status
     bool     halt;
 } mips_status_t;
 
+typedef struct mem_stage_values
+{
+    uint32_t mem_reg;
+    uint32_t alu_temp;
+} mem_stage_values_t;
+
+typedef struct ex_stage_values
+{
+    uint32_t mem_reg;
+    uint32_t alu_temp;
+} ex_stage_values_t;
+
+
 //Hazard prototypes
-bool hazard_flag;
+int hazard_flag;
 
 typedef enum{
     NO_FWDH = 0x0, //for the case when we don't have any forwarding hazards
@@ -120,8 +133,8 @@ void closeFile(FILE* inputFile);
 void arrayMemImageFill(int32_t* memory_array, FILE* inputFile);
 
 //function prototypes for pipeline stages
-void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal, bool* hazard_flag);
-void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], bool* hazard_flag, forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag);
+void inst_fetch(inst_t instructions[],int32_t* registers, int32_t* memory, struct mips_status* status_struct, int32_t branch_signal, int* hazard_flag);
+void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registers[], int32_t memory[], int* hazard_flag, forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag);
 void execution_stage (inst_t instructions[], struct mips_status *mips_status_t, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag);
 void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], int32_t memory[], bool memChange[]);
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[]);

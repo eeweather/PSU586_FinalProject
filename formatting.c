@@ -124,8 +124,6 @@ void printHazards(int hazards, int totalStall, int totalCycles, FILE* outputFile
 	float avgStall = ((float)totalStall) / ((float)hazards);
 
 	printf("\n");
-	printf("\nForwarding case");
-	printf("\n");
 	printf("\nTotal hazards: %d", hazards);
 	printf("\nTotal stalls: %d", totalStall);
 	printf("\nAverage stall per hazard: %f", avgStall);
@@ -134,32 +132,11 @@ void printHazards(int hazards, int totalStall, int totalCycles, FILE* outputFile
 	printf("\n");
 
 	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nForwarding case");
-	fprintf(outputFile, "\n");
 	fprintf(outputFile, "\nTotal hazards: %d", hazards);
 	fprintf(outputFile, "\nTotal stalls: %d", totalStall);
 	fprintf(outputFile, "\nAverage stall per hazard: %f", avgStall);
 	fprintf(outputFile, "\n");
 	fprintf(outputFile, "\nTotal execution time: %d", totalCycles);
-	fprintf(outputFile, "\n");
-
-	return;
-}
-
-// Print speedup achieved by implementing data forwarding
-//
-// nfCycles: total execution time in cycles for non-forwarding case
-// fCycles: total execution time in cycles for forwarding case
-void printSpeedupAchieved(int nfCycles, int fCycles, FILE* outputFile)
-{
-	float speedup = ((float)nfCycles) / ((float)fCycles);
-
-	printf("\n");
-	printf("\nTotal speedup achieved with data forwarding: %f", speedup);
-	printf("\n");
-
-	fprintf(outputFile, "\n");
-	fprintf(outputFile, "\nTotal speedup achieved with data forwarding: %f", speedup);
 	fprintf(outputFile, "\n");
 
 	return;

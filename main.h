@@ -61,7 +61,7 @@ typedef struct inst
     int rs;  //removed separate rs and rt for instruction types
     int rt;
     int rd;
-    int imm;
+    int32_t imm;
     int valA;
     int valB;
     bool nop;

@@ -163,6 +163,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     mips_status->count_hazards++;
                     if (mips_status->mode == FORWARDING)
                     {
+                        mips_status->count_hazards--;
                         *hazard_flag = 0;
                         *forward_stage_flag = MEM_WB;
                         *forward_reg_flag = RS;
@@ -179,6 +180,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                     mips_status->count_hazards++;
                     if (mips_status->mode == FORWARDING)
                     {
+                        mips_status->count_hazards--;
                         *hazard_flag = 0;
                         *forward_stage_flag = MEM_WB;
                         *forward_reg_flag = RT;
@@ -201,6 +203,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
                     if (mips_status->mode == FORWARDING)
                     {
+                        mips_status->count_hazards--;
                         *hazard_flag = 0;
                         *forward_stage_flag = MEM_WB;
                         *forward_reg_flag = RS;
@@ -229,6 +232,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
                     if (mips_status->mode == FORWARDING)
                     {
+                        mips_status->count_hazards--;
                         *hazard_flag = 0;
                         *forward_stage_flag = MEM_WB;
                         *forward_reg_flag = RS;
@@ -245,6 +249,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
                     if (mips_status->mode == FORWARDING)
                     {
+                        mips_status->count_hazards--;
                         *hazard_flag = 0;
                         *forward_stage_flag = MEM_WB;
                         *forward_reg_flag = RT;
@@ -266,6 +271,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
 
                     if (mips_status->mode == FORWARDING)
                     {
+                        mips_status->count_hazards--;
                         *hazard_flag = 0;
                         *forward_stage_flag = MEM_WB;
                         *forward_reg_flag = RS;
@@ -301,6 +307,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                         }
                         else
                         {
+                            mips_status->count_hazards--;
                             *hazard_flag = 0;
                             *forward_stage_flag = EX_MEM;
                             *forward_reg_flag = RS;
@@ -326,6 +333,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                         }
                         else
                         {
+                            mips_status->count_hazards--;
                             *hazard_flag = 0;
                             *forward_stage_flag = EX_MEM;
                             *forward_reg_flag = RT;
@@ -355,6 +363,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                         }
                         else
                         {
+                            mips_status->count_hazards--;
                             *hazard_flag = 0;
                             *forward_stage_flag = EX_MEM;
                             *forward_reg_flag = RS;
@@ -392,6 +401,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                         }
                         else
                         {
+                            mips_status->count_hazards--;
                             *hazard_flag = 0;
                             *forward_stage_flag = EX_MEM;
                             *forward_reg_flag = RS;
@@ -417,6 +427,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                         }
                         else
                         {
+                            mips_status->count_hazards--;
                             *hazard_flag = 0;
                             *forward_stage_flag = EX_MEM;
                             *forward_reg_flag = RT;
@@ -444,6 +455,7 @@ void id_stage(inst_t instructions[], mips_status_t *mips_status, int32_t registe
                         }
                         else
                         {
+                            mips_status->count_hazards--;
                             *hazard_flag = 0;
                             *forward_stage_flag = EX_MEM;
                             *forward_reg_flag = RS;

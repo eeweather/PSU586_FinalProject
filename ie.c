@@ -68,25 +68,25 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         else if(*forward_stage_flag == EX_MEM){
 
             if(*forward_reg_flag == RS){
-                rs_value = mips_status->alu_temp;
-                // printf("assigning alu_temp to rs_value: %d\n",rs_value);
+                rs_value = mem_values[0].mem_reg;
+                //printf("assigning alu_temp to rs_value: %d\n",rs_value);
             }
             else if(*forward_reg_flag == RT){
                 
-                rt_value = mips_status->alu_temp;
-                // printf("assigning alu_temp to rt_value: %d\n",rt_value);
+                rt_value = mem_values[0].mem_reg;
+                //printf("assigning alu_temp to rt_value: %d\n",rt_value);
             }
             else{
                 printf("Error with EX forwarding to incorrect register, not RS or RT.\n");
             }
         }else if(*forward_stage_flag == MEM_WB){
             if(*forward_reg_flag == RS){
-                rs_value = mips_status->mem_reg;
-                // printf("assigning mem_reg to rs_value: %d\n",rs_value);
+                rs_value = mem_values[1].mem_reg;
+                //printf("assigning mem_reg to rs_value: %d\n",rs_value);
             }
             else if(*forward_reg_flag == RT){
-                rt_value = mips_status->mem_reg;
-                // printf("assigning mem_reg to rt_value: %d\n",rt_value);
+                rt_value = mem_values[1].mem_reg;
+                //printf("assigning mem_reg to rt_value: %d\n",rt_value);
 
             }
             else{
@@ -112,7 +112,7 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
                 break;  //if destination is zero, skip case
             }
             mips_status->alu_temp = rs_value + rt_value;
-            // printf("ADD, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
+            //printf("ADD, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
             mips_status->count_arith++;
             break;
 
@@ -120,7 +120,7 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //transfer the result to register Rt). Opcode: 000001
         case (ADDI):
             mips_status->alu_temp = rs_value + current_int.imm;
-            // printf("ADDI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
+            //printf("ADDI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_arith++;
             break;
 
@@ -128,7 +128,7 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //register Rd). Opcode: 000010
         case (SUB):
             mips_status->alu_temp = rs_value - rt_value;
-            // printf("SUB, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
+            //printf("SUB, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
             mips_status->count_arith++;
             break;
 
@@ -136,6 +136,7 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //transfer the result to register Rt). Opcode: 000011
         case (SUBI):
             mips_status->alu_temp = rs_value - current_int.imm;
+            //printf("SUBI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_arith++;
             break;
 
@@ -201,7 +202,7 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //“A” into register Rt). Opcode: 001100
         case (LDW):
             mips_status->alu_temp = rs_value + current_int.imm;
-            // printf("LDW, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
+            //printf("LDW, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_memory_access++;
             break;
 

@@ -34,7 +34,7 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips
 
     if(*hazard_flag > 0){
         status_struct->count_stall++;
-        printf("Stall is: %d\n", status_struct->count_stall);
+        //printf("Stall is: %d\n", status_struct->count_stall);
         temp = *hazard_flag - 1;
         *hazard_flag= temp;
     }

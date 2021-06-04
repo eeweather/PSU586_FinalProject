@@ -14,7 +14,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 		if (opcode == LDW)	// load instruction
 		{
 			mips_status->mem_reg = memory[alu_temp>>2];	// load value from memory into temporary register
-			// printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
+			//printf("In MEM mem_reg: %d, shifted from: %d \n", mips_status->mem_reg, alu_temp);
 		}
 		else if (opcode == STW)	// store instruction
 		{
@@ -40,7 +40,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	}
 	if (mips_status->jump_flag == TRUE)
 	{	// update program counter if jump taken
-		printf("jumping\n");
+		//printf("jumping\n");
 		mips_status->pc = alu_temp -4;
 		//jump complete, turn off flag
 		//mips_status->flushcount=2;
@@ -65,7 +65,8 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 
 // WB stage of pipeline
 void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t registers[], bool regChange[])
-{printf("in WB\n");
+{
+	//printf("in WB\n");
 	instructions[WB]=instructions[MEM];
 	opcode_t opcode = instructions[WB].opcode;
 	uint8_t rt = instructions[WB].rt;

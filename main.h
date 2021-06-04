@@ -77,9 +77,9 @@ typedef struct mips_status
     uint32_t pc;
     uint32_t npc;
     uint32_t pc_branch;
-    uint32_t alu_temp;
-    uint32_t prior_alu_temp;
-    uint32_t mem_reg;
+    int32_t alu_temp;
+    int32_t prior_alu_temp;
+    int32_t mem_reg;
     uint32_t temp_pc;
     uint16_t count_total;
     uint16_t count_arith;

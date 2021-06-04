@@ -6,7 +6,7 @@ void memory_stage(inst_t instructions[], mips_status_t* mips_status, int32_t reg
 	
 	instructions[MEM] = instructions[EX];
 	opcode_t opcode = instructions[MEM].opcode;
-	uint32_t alu_temp = mips_status->alu_temp;
+	int32_t alu_temp = mips_status->alu_temp;
 	uint8_t rt = instructions[MEM].rt;
 
 	if (instructions[MEM].nop == false)
@@ -70,7 +70,7 @@ void writeback_stage(inst_t instructions[], mips_status_t* mips_status, int32_t 
 	opcode_t opcode = instructions[WB].opcode;
 	uint8_t rt = instructions[WB].rt;
 	uint8_t rd = instructions[WB].rd;
-	uint32_t mem_reg = mips_status->mem_reg;
+	int32_t mem_reg = mips_status->mem_reg;
 
 	if (instructions[WB].nop == false)
 	{

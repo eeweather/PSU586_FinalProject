@@ -1,0 +1,100 @@
+
+
+Instruction counts
+
+Total number of instructions: 911
+Arithmetic instructions: 405
+Logical instructions: 61
+Memory access instructions: 300
+Control transfer instructions: 145
+
+
+Final register state
+
+Program Counter: 112
+R11: 1044
+R12: 1836
+R13: 2640
+R14: 25
+R15: -188
+R16: 15
+R17: 29
+R18: 3440
+R19: -1
+R20: -2
+R21: -1
+R22: 76
+R23: 3
+R24: -1
+R25: 3
+
+
+Final memory state
+
+Address: 2400, contents 2
+Address: 2404, contents 4
+Address: 2408, contents 8
+Address: 2412, contents 8
+Address: 2416, contents 14
+Address: 2420, contents 12
+Address: 2424, contents 20
+Address: 2428, contents 16
+Address: 2432, contents 26
+Address: 2436, contents 29
+Address: 2440, contents 32
+Address: 2444, contents 24
+Address: 2448, contents 38
+Address: 2452, contents 28
+Address: 2456, contents 44
+Address: 2460, contents 32
+Address: 2464, contents 50
+Address: 2468, contents 36
+Address: 2472, contents 56
+Address: 2476, contents 59
+Address: 2480, contents 62
+Address: 2484, contents 44
+Address: 2488, contents 68
+Address: 2492, contents 48
+Address: 2496, contents 74
+Address: 2500, contents 52
+Address: 2504, contents 80
+Address: 2508, contents 56
+Address: 2512, contents 86
+Address: 2516, contents 89
+Address: 2520, contents 92
+Address: 2524, contents 64
+Address: 2528, contents 98
+Address: 2532, contents 68
+Address: 2536, contents 104
+Address: 2540, contents 72
+Address: 2544, contents 110
+Address: 2548, contents 76
+Address: 2552, contents 116
+Address: 2556, contents 119
+Address: 2560, contents 122
+Address: 2564, contents 84
+Address: 2568, contents 128
+Address: 2572, contents 88
+Address: 2576, contents 134
+Address: 2580, contents 92
+Address: 2584, contents 140
+Address: 2588, contents 96
+Address: 2592, contents 146
+Address: 2596, contents 149
+Address: 2600, contents 2
+Address: 2604, contents 4
+Address: 2608, contents 8
+Address: 2612, contents 8
+Address: 2616, contents 14
+Address: 2620, contents 12
+Address: 2624, contents 20
+Address: 2628, contents 16
+Address: 2632, contents 26
+Address: 2636, contents 29
+
+
+Total hazards: 397
+Total stalls: 60
+Average stall per hazard: 0.151134
+
+Total execution time: 1212

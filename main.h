@@ -81,14 +81,13 @@ typedef struct mips_status
     int32_t prior_alu_temp;
     int32_t mem_reg;
     uint32_t temp_pc;
-    uint16_t count_total;
-    uint16_t count_arith;
-    uint16_t count_logic;
-    uint16_t count_memory_access;
-    uint16_t count_control_flow;
-    uint16_t count_stall;
-    uint16_t count_hazards;
-    uint16_t cycles;
+    int16_t count_arith;
+    int16_t count_logic;
+    int16_t count_memory_access;
+    int16_t count_control_flow;
+    int16_t count_stall;
+    int16_t count_hazards;
+    int16_t cycles;
     int flushcount;
     bool     zero_flag;
     bool     jump_flag;
@@ -101,7 +100,7 @@ typedef struct mips_status
 
 typedef struct mem_stage_values
 {
-    uint32_t mem_reg;
+    int32_t mem_reg;
 } mem_stage_values_t;
 
 typedef struct ex_stage_values

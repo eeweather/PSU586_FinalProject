@@ -94,7 +94,7 @@ Address: 2636, contents 29
 
 
 Total hazards: 554
-Total stalls: 554
-Average stall per hazard: 1.000000
+Total stalls: 801
+Average stall per hazard: 1.445848
 
 Total execution time: 1706

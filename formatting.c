@@ -121,12 +121,17 @@ void printMemStates(int mem[], bool memChange[], FILE* outputFile)
 // totalCycles: total execution time in clock cycles
 void printHazards(int mode, int hazards, int totalStall, int totalCycles, FILE* outputFile)
 {
-	float avgStall = ((float)totalStall) / ((float)hazards);
+	float avgStall;
 
-    if(mode == 0)
-    {
-    }
-    else
+	if (mode == FORWARDING)
+	{
+		totalStall = hazards;
+	}
+
+	avgStall = ((float)totalStall) / ((float)hazards);
+
+
+    if(mode != FUNCTIONAL)
     {
         printf("\n");
         printf("\nTotal hazards: %d", hazards);

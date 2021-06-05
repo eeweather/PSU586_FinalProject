@@ -10,8 +10,8 @@
 #include "main.h"
 
 //prototypes in if.c, not accessible outside of if.c
-uint32_t mux_pc(struct mips_status* status_struct, int32_t branch_signal);
-void increment_pc(struct mips_status* status_struct);
+uint32_t mux_pc(mips_status_t* status_struct, int32_t branch_signal);
+void increment_pc(mips_status_t* status_struct);
 
 //order of operations in IF: mux PC decision from previous stages, fetch value, place in register, increment pc
 
@@ -33,7 +33,6 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips
     printf("pc to fetch in IF: %d\n", status_struct->pc);
 
     if(*hazard_flag > 0){
-        status_struct->count_stall++;
         //printf("Stall is: %d\n", status_struct->count_stall);
         temp = *hazard_flag - 1;
         *hazard_flag= temp;
@@ -56,7 +55,7 @@ void inst_fetch(inst_t instructions[], int32_t* registers, int32_t* memory, mips
 //returns the PC to be used(whether this will be yes (1) or no (0) to take the branch); this needs to always happen after increment_pc from previous (so putting at beginning except for when we are reading the first line and PC == 0)
 //need to be careful how we bring in control signal -> not clear in my mind yet how we will do that
 //need to ensure the following: 1) no one overwrites pc after IF, 2) no one overwrites pc_branch after EX/MEM before IF and that control signal comes in for the right instruction
-uint32_t mux_pc(struct mips_status* status_struct, int32_t branch_signal){
+uint32_t mux_pc(mips_status_t* status_struct, int32_t branch_signal){
 
     uint32_t chosen_pc_temp;
 
@@ -84,7 +83,7 @@ uint32_t mux_pc(struct mips_status* status_struct, int32_t branch_signal){
 
 //increment function: take current PC and increment by 4 Bytes to point to next memory location, add 1
 //to increment the pc assuming no branch will be taken; not accessible outside of if.c
-void increment_pc(struct mips_status* status_struct){
+void increment_pc(mips_status_t* status_struct){
 
     //uint32_t temp;
 

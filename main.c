@@ -62,16 +62,11 @@ int main(int argc, char *argv[])
 	{
 		writeback_stage(instructions, &status, registers, regChange);
 		memory_stage(instructions, &status, registers, memory, memChange, mem_values, ex_values);
-//        if (status.halt == true){
-//			printf("Halting\n");
-//            break;}
 		execution_stage(instructions, &status, registers, &forward_stage_flag, &forward_reg_flag, mem_values, ex_values);
 		id_stage(instructions, &status, registers, memory, &hazard_flag, &forward_stage_flag, &forward_reg_flag);
 		inst_fetch(instructions, registers, memory, &status, branch_control_signal, &hazard_flag); //IF stage
 		status.cycles++;
 
-//		char* str[1024];
-//		gets(str);
 	}
     
     
@@ -278,19 +273,18 @@ void initialize_status(mips_status_t* status, int mode, bool debug)
 	status->mem_reg 		= 0;
 	status->temp_pc 		= 0;
 	status->jump_flag 		= false;
-	status->count_total 		= 0; //initialize counts to zero
 	status->count_arith 		= 0;
 	status->count_logic 		= 0;
 	status->count_memory_access 	= 0;
 	status->count_control_flow 	= 0;
-	status->cycles				= 0;
+	status->cycles			= 0;
 	status->count_stall 		= 0;
-	status->flushcount			= 0;
+	status->flushcount		= 0;
 	status->zero_flag 		= false;
 	status->jump_flag 		= false;
 	status->halt 			= false;
-	status->lwd_stall_flag = false;
-	status->count_hazards =0;
+	status->lwd_stall_flag 		= false;
+	status->count_hazards 		= 0;
 
 	return;
 }
@@ -299,7 +293,7 @@ void initialize_instructions(inst_t* instructions)
 {
 	for (int index = 0; index < 5; index++)
 	{
-    	instructions[index].binary 		= 0; //maybe dont need
+    	instructions[index].binary 			= 0; //maybe dont need
    		instructions[index].type 		= 'r';
    		instructions[index].opcode 		= ADD;
    	 	instructions[index].rs 			= 0;  //removed separate rs and rt for instruction types

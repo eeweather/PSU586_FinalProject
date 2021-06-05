@@ -9,31 +9,8 @@
 
 #include "main.h"
 
-void execution_stage (inst_t instructions[], struct mips_status *mips_status, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag, mem_stage_values_t mem_values[], ex_stage_values_t ex_values[])
+void execution_stage (inst_t instructions[], mips_status_t *mips_status, int32_t registers[], forward_stage_t* forward_stage_flag, forward_reg_t* forward_reg_flag, mem_stage_values_t mem_values[], ex_stage_values_t ex_values[])
 { 
-
-/*
-    switch (*forward_stage_flag){
-        case (NO_FWDH):
-            printf("No forwarding hazard\n");
-            break;
-        case (EX_MEM):
-            printf("Forwarding hazard, need data from EX stage\n");
-            break;
-        case (MEM_WB):
-            printf("Forwarding hazard, need data from MEM stage\n");
-            break;
-    }
-    switch (*forward_reg_flag){
-        case (RS):
-            printf("Forwarding hazard for RS reg\n");
-            break;
-        case (RT):
-            printf("Forwarding hazard for RT reg\n");
-            break;
-    }
-*/
-    
 
     instructions[EX] = instructions[ID];
     //check for nop, and skip execution logic if true
@@ -48,18 +25,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
 
         int32_t rs_value = registers[current_int.rs];
         int32_t rt_value = registers[current_int.rt];
-        // printf("instruction rs: %d\n",current_int.rs);
-        // printf("instruction rt: %d\n",current_int.rt);
-        // printf("rs value bf forwarding flags: %d\n",rs_value);
-        // printf("rt value bf forwarding flags: %d\n",rt_value);
-        // printf("mem_values 1 memreg: %d\n",mem_values[1].mem_reg);
-        
-        // printf("mem_values 0 memreg: %d\n",mem_values[0].mem_reg);
-        // printf("ex_values 1 alu_temp: %d\n",ex_values[1].alu_temp);
-        
-        // printf("ex_values 0 alu_temp: %d\n",ex_values[0].alu_temp);
-
-
 
         if(*forward_stage_flag == NO_FWDH){
             //do nothing
@@ -69,12 +34,10 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
 
             if(*forward_reg_flag == RS){
                 rs_value = mem_values[0].mem_reg;
-                //printf("assigning alu_temp to rs_value: %d\n",rs_value);
             }
             else if(*forward_reg_flag == RT){
                 
                 rt_value = mem_values[0].mem_reg;
-                //printf("assigning alu_temp to rt_value: %d\n",rt_value);
             }
             else{
                 printf("Error with EX forwarding to incorrect register, not RS or RT.\n");
@@ -82,11 +45,9 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         }else if(*forward_stage_flag == MEM_WB){
             if(*forward_reg_flag == RS){
                 rs_value = mem_values[1].mem_reg;
-                //printf("assigning mem_reg to rs_value: %d\n",rs_value);
             }
             else if(*forward_reg_flag == RT){
                 rt_value = mem_values[1].mem_reg;
-                //printf("assigning mem_reg to rt_value: %d\n",rt_value);
 
             }
             else{
@@ -94,13 +55,9 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
             }
         }
 
-        
-        // printf("rs value after forwarding flags: %d\n",rs_value);
-        // printf("rt value after forwarding flags: %d\n",rt_value);
         *forward_stage_flag = NO_FWDH; //resolve this back to no forwarding hazard until we get a true hazard error again
 
         printf("current Opcode: %x-------------------------------\n",current_int.opcode);
-        //printf("current rd: %x-------------------------------\n",current_int.rd);
         
         mips_status->prior_alu_temp = mips_status->alu_temp; //copy the alu_temp to have for MEM forwarding (previous instruction info)
         switch (current_int.opcode)
@@ -112,7 +69,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
                 break;  //if destination is zero, skip case
             }
             mips_status->alu_temp = rs_value + rt_value;
-            //printf("ADD, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
             mips_status->count_arith++;
             break;
 
@@ -120,7 +76,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //transfer the result to register Rt). Opcode: 000001
         case (ADDI):
             mips_status->alu_temp = rs_value + current_int.imm;
-            //printf("ADDI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_arith++;
             break;
 
@@ -128,7 +83,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //register Rd). Opcode: 000010
         case (SUB):
             mips_status->alu_temp = rs_value - rt_value;
-            //printf("SUB, alu temp: %d rs: %d rt: %d\n", mips_status->alu_temp, rs_value, rt_value);
             mips_status->count_arith++;
             break;
 
@@ -136,7 +90,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //transfer the result to register Rt). Opcode: 000011
         case (SUBI):
             mips_status->alu_temp = rs_value - current_int.imm;
-            //printf("SUBI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_arith++;
             break;
 
@@ -179,7 +132,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //immediate value “Imm”, transfer the result to register Rt). Opcode: 001001
         case (ANDI):
             mips_status->alu_temp = rs_value & current_int.imm;
-            // printf("ANDI, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_logic++;
             break;
 
@@ -202,7 +154,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //“A” into register Rt). Opcode: 001100
         case (LDW):
             mips_status->alu_temp = rs_value + current_int.imm;
-            //printf("LDW, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_memory_access++;
             break;
 
@@ -211,7 +162,6 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         //address “A”). Opcode: 001101
         case (STW):
             mips_status->alu_temp = rs_value + current_int.imm;
-            // printf("STW, alu temp: %d rs: %d imm: %d\n", mips_status->alu_temp, rs_value, current_int.imm);
             mips_status->count_memory_access++;
             break;
 
@@ -222,15 +172,11 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
             {
                 mips_status->jump_flag = true;
                 mips_status->flushcount=2;
-                //instructions[IF].nop = TRUE;
-                //instructions[ID].nop = TRUE;
                 mips_status->alu_temp = (((current_int.imm<<2)-4) + mips_status->pc);
-                // printf("BZ taken, alu temp: %d, imm: %d, imm<<2: %d, pc: %d\n", mips_status->alu_temp, current_int.imm, (current_int.imm<<2), mips_status->pc);
                 mips_status->count_control_flow++;
             }
             else
             {
-                // printf("Branch BZ is not taken\n");
                 mips_status->count_control_flow++;
             }
             break;
@@ -242,17 +188,11 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
             {
                 mips_status->jump_flag = true;
                 mips_status->flushcount=2;
-                
-                //instructions[IF].nop = TRUE;
-                //instructions[ID].nop = TRUE;
-                //printf("before BEQ (taken) math, imm: %d and pc: %d\n", current_int.imm,(int) mips_status->pc);
                 mips_status->alu_temp = (((current_int.imm<<2) - 4) + mips_status->pc);
-                // printf("BEQ taken, alu temp: %d, imm: %d, imm<<2-4: %d, pc: %d\n", mips_status->alu_temp, current_int.imm, ((current_int.imm<<2) -4), mips_status->pc);
                 mips_status->count_control_flow++;
             }
             else
             {
-                // printf("Branch BEQ is not taken\n");
                 mips_status->count_control_flow++;
             }
             break;
@@ -262,39 +202,26 @@ void execution_stage (inst_t instructions[], struct mips_status *mips_status, in
         case (JR):
             mips_status->jump_flag = true;
             mips_status->flushcount=2;
-            //instructions[IF].nop = TRUE;
             instructions[ID].nop = TRUE;
-            //printf(" Unconditional Branch is taken\n");
             mips_status->alu_temp = (rs_value +4 );
-            // printf("JR taken, alu temp: %d, rs: %d, rs+4: %d\n", mips_status->alu_temp, rs_value, (rs_value +4) );
 
             mips_status->count_control_flow++;
             break;
             
         //HALT (Stop executing the program). Opcode: 010001
         case (HALT):
-            // printf(" Halt case\n");
             mips_status->count_control_flow++;
             break;
             
         // Simulator shouldn't reach the default state
         default:
-            //printf("Default Case reached in Execute Stage.  Something isn't working.\n");
             break;
         }
-        //printf("current count: %d-------------------------------\n",mips_status->count_total);
-        //printf("current pc: %d\n",mips_status->pc);
         instructions[EX] = current_int;
     }
     ex_values[2]=ex_values[1];
     ex_values[1]=ex_values[0];
-	// ex_values[0]->rs_value= rs_value;
-    // ex_values[0]->rt_value= rt_value;
     ex_values[0].alu_temp= mips_status->alu_temp;
-//    printf("nop in IF-----------------%d\n",instructions[IF].nop);
-//    printf("nop in ID-----------------%d\n",instructions[ID].nop);
-//    printf("nop in EX-----------------%d\n",instructions[EX].nop);
-//    printf("nop in MEM-----------------%d\n",instructions[MEM].nop);
-//    printf("nop in WB-----------------%d\n",instructions[WB].nop);
+
     return;
 }
